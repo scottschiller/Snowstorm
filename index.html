@@ -2,9 +2,9 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>DHTML Snowstorm: Javascript snow effect using PNG with GIF fallback</title>
+<title>Javascript Snow: DHTML Snowstorm</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
-<meta name="description" content="DHTML Snowstorm Demo: A Javascript snow effect using PNG with GIF fallback. The creative and technical work of Scott Schiller, also known as 'Schill'." />
+<meta name="description" content="A free Javascript snow effect using PNG or GIF images. Easy to add to your site and customize." />
 <meta name="keywords" content="DHTML Snowstorm, DHTML snow, javascript snow, snow effect, Scott Schiller, Schill, Schillmania" />
 <meta name="robots" content="all" />
 <meta name="author" content="Scott Schiller" />
@@ -15,46 +15,56 @@
 <!-- Copy the <script> tag into your own page(s) for the snow effect. That is all! (No CSS etc. is needed) -->
 <script type="text/javascript" src="script/snowstorm.js"></script>
 
+<!-- bonus christmas light stuff, not required for snowstorm -->
+<script type="text/javascript" src="lights/soundmanager2-nodebug-jsmin.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.6.0/build/yahoo-dom-event/yahoo-dom-event.js&2.6.0/build/animation/animation-min.js"></script>
+<script type="text/javascript" src="lights/christmaslights.js"></script>
+
 </head>
 
 <body>
 
 <div id="container">
 
- <h1>DHTML Snowstorm!</h1>
- <div>Version 1.2.20041121a - <span class="bright">Updated 11.21.2004</span></div>
- <div style="color:#666666">Code by Scott Schiller | schillmania.com</div>
+ <div id="lights">
+  <!-- lights go here -->
+ </div>
+
+ <div id="content">
+
+ <h1>Snowstorm: A Javascript Snow Effect for HTML</h1>
+ <p class="alt noTop">Bringing snow to the web since 2003. Current version: 1.3.20081208</p>
 
  <p>
-  <a href="javascript:snowStorm.randomizeWind()">Change Wind</a><br />
-  <a href="javascript:snowStorm.stop()">Stop Snowing</a><br />
+  <a href="javascript:snowStorm.randomizeWind()">Change Wind</a> | <a href="javascript:snowStorm.stop()">Stop Snowing</a> | Bonus widget: <a href="lights/" onclick="if (document.location.protocol != 'http') this.href=this.href+'index.html'">Smash Christmas Lights</a>
  </p>
+ <p id="special" class="special">(Note: Christmas Lights are incompatible with IE 6 because of PNG images.)</p>
 
- <h2>Latest Changes</h2>
- <ul>
-  <li>Script moved into one file (snowstorm.js) for simplicity</li>
-  <li>addEventHandler and PNG support functions updated</li>
- </ul>
+ <h2>Let It Snow.</h2>
 
- <h2>Executive Summary</h2>
-
- <h3 class="noTop">So, you want Javascript snow on your web site, eh?</h3>
+ <h3>So, you want Javascript snow on your web site, eh?</h3>
  
- <p class="first">SnowStorm is a Javascript-driven snow effect that can be easily implemented into web pages.</p>
+ <p class="first">Snowstorm is a Javascript-driven snow effect that can be easily implemented into web pages. It is free for use.</p>
 
  <p>It has been designed to be easy to use. A single Javascript file provides the functionality required; the only other files needed are the images of snowflakes themselves.</p>
 
  <h3>I'd like to use this on my site.</h3>
 
- <p class="first">See this <a href="basic-example.html">basic example</a> for reference.</p>
+ <p>See this <a href="basic-example.html">basic example</a> for reference.</p>
+
+ <h3>What kind of things can I customize?</h3>
+
+ <p>You can adjust the snow speed, the amount of snow, the "wind", if and where it should collect (and if it should build up over time, or quickly "melt"), and finally, whether the snow can react to the mouse moving (ie., "wind changes.")</p>
+
+ <h3>And the Christmas Lights?</h3>
+
+ <p>The christmas lights are a separate experimental script which also has an <a href="lights/" onclick="if (document.location.protocol != 'http') this.href=this.href+'index.html'">example</a>. It is undocumented, but the script can be modified to taste if you're the adventurous type.</p>
 
  <h2>Technical Notes</h2>
 
- <p class="first">SnowStorm works under most of the current major browsers (IE 5.x+, Netscape 6+). Testing has been limited to those browsers on PC/Mac. If you are seeing snow as you read this, then the script is working as expected.</p>
+ <p class="first">Snowstorm works under most of the current major browsers (IE 5.x+, Netscape 6+). Testing has been limited to those browsers on PC/Mac. If you are seeing snow as you read this, then the script is working as expected.</p>
 
- <p>Thanks to the PNG format and a "wrapper" class written to support it, the benefits of alpha transparency can be seen on most browsers with this implementation. IE requires the use of a proprietary DXFilter to properly display PNG images with alpha transparency, but this is handled "automagically" by the PNG wrapper class.</p>
-
- <p>The snow script relies on a PNG handler class to add PNG functionality where applicable. Support for PNG can be removed easily enough also, if desired. Slower machines on IE:win32 may notice slightly improved performance when using GIF over PNG, but this has not been thoroughly tested.</p>
+ <p>PNG images are used for all browsers except IE 6, which gets GIFs.</p>
 
  <h2>Implementation</h2>
 
@@ -67,7 +77,7 @@
  <p class="first">This file is viewable under the <a href="script/">script</a> directory.</p>
 
  <h2>File Structure</h2>
- <p class="first">The script looks for snow images under ./image/snow/ by default as shown below. If desired, this can be changed in the user-configurable section.</p>
+ <p class="first">The script looks for snow images under ./image/snow/ by default as shown below. If desired, this can be changed in the user-configurable section - eg., /path/to/snow/images/</p>
 
 <pre>
 ./
@@ -85,46 +95,52 @@
     3.gif
     4.gif
     5.gif
-    none.gif
 + script/
     snowstorm.js
 </pre>
 
  <h2>Configurable Properties</h2>
 
- <p class="first">SnowStorm can be fairly easily customized; some of the major properties are listed below.</p>
+ <p class="first">Snowstorm can be fairly easily customized; some of the major properties are listed below.</p>
 
  <dl>
 
   <dt><code>usePNG</code></dt>
-  <dd><em>Enables PNG images if supported. <code>false</code> disables all PNG usage and uses GIFs - may run slightly faster on older systems.</em></dd>
+  <dd>Uses PNG images if supported. <code>false</code> disables PNG for GIFs; may run slightly faster on older systems.</dd>
 
   <dt><code>imagePath</code></dt>
-  <dd><em>The relative path to the snowflake PNG/GIF images. eg. <code>image/snow/</code> (note the trailing slash - important)</em></dd>
+  <dd>The relative path to the snowflake PNG/GIF images. eg. <code>image/snow/</code> (note the trailing slash - important)</dd>
 
   <dt><code>flakeTypes</code></dt>
-  <dd><em>Sets the range of snowflake images to use. eg. a value of <code>5</code> will use images ranging from <code>0.png</code> (or .gif) to <code>4.png</code>.</em></dd>
+  <dd>Sets the range of snowflake images to use. eg. a value of <code>5</code> will use images ranging from <code>0.png</code> (or .gif) to <code>4.png</code>.</dd>
 
   <dt><code>flakesMax</code></dt>
-  <dd><em>Sets the maximum number of snowflakes that can exist on the screen at any given time.</em></dd>
+  <dd>Sets the maximum number of snowflakes that can exist on the screen at any given time.</dd>
 
   <dt><code>flakesMaxActive</code></dt>
-  <dd><em>Sets the limit of "falling" snowflakes (ie. moving on the screen, thus considered to be active.)</em></dd>
+  <dd>Sets the limit of "falling" snowflakes (ie. moving on the screen, thus considered to be active.)</dd>
 
   <dt><code>vMax</code></dt>
-  <dd><em>Defines the maximum X and Y velocities for the storm; a random value in this range is selected for each snowflake.</em></dd>
+  <dd>Defines maximum X and Y velocities for the storm; a random value in this range is selected for each snowflake.</dd>
 
   <dt><code>flakeWidth</code></dt>
-  <dd><em>Width (pixels) allocated for ech snowflake image.</em></dd>
+  <dd>Width (pixels) allocated for ech snowflake image.</dd>
 
   <dt><code>flakeHeight</code></dt>
-  <dd><em>Height (pixels) allocated for each snowflake image.</em></dd>
+  <dd>Height (pixels) allocated for each snowflake image.</dd>
 
   <dt><code>flakeBottom</code></dt>
-  <dd><em>Limits the "floor" (pixels) of the snow. If unspecified, snow will "stick" to the bottom of the browser window and persists through browser resize/scrolling.</em></dd>
+  <dd>Limits the "floor" (pixels) of the snow. If unspecified, snow will "stick" to the bottom of the browser window and persists through browser resize/scrolling.</dd>
+
+  <dt><code>snowStick</code></dt>
+  <dd>Allows the snow to "stick" to the bottom of the window. When off, snow will never sit at the bottom.</dd>
 
   <dt><code>snowCollect</code></dt>
-  <dd><em>Specifies whether or not snow should be allowed to stack and pile up. Can eventually be very CPU-intensive.</em></dd>
+  <dd>Specifies whether or not snow should be allowed to stack and pile up. Can eventually be very CPU-intensive.</dd>
+  <dd>Also requires snowStick = true.</dd>
+
+  <dt><code>followMouse</code></dt>
+  <dd>Allows snow to move dynamically with the "wind", relative to the mouse's X (left/right) coordinates.</dd>
 
  </dl>
 
@@ -132,17 +148,29 @@
  <p class="first">ZIP file, includes this demo page and source code.</p>
 
  <ul>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20041121a.zip">SnowStorm v1.2.20041121a</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv13_20081208.zip">SnowStorm v1.3.20081208</a></li>
  </ul>
 
  <h3>Older versions</h3>
  <ul>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20041121a.zip">SnowStorm v1.2.20041121a</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031218a.zip">SnowStorm v1.2.20031218a</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">SnowStorm v1.2.20031213a</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">SnowStorm v1.1.20031206c</a></li>
  </ul>
 
  <h2>Version History</h2>
+
+ <h3>1.3.20081208</h3>
+ <ul>
+  <li>New snowStick (snow stickiness) and followMouse (dynamic wind) options.</li>
+  <li>Four years later, we still have IE 6 and can't use position:fixed globally for "sticky" snow, but we're really close.</li>
+  <li>Position:fixed used for all more modern browsers.</li>
+  <li>Improved distribution of initial snow dump, new recycling.</li>
+  <li>Focus/blur events (minus IE) for graceful pausing of snow, sparing user's CPU when window not in focus.</li>
+  <li>Bonus smashable christmas lights demo, using <a href="http://schillmania.com/projects/soundmanager2/" title="Javascript Sound api, play mp3s with javascript">SoundManager 2</a> and <a href="http://developer.yahoo.com/yui/" title="Yahoo! User Interface Library">YUI</a> DOM/Event libraries</li>
+  <li>Cleaner, simplified event code, removal of old PNG wrapper stuff.</li>
+ </ul>
 
  <h3>1.2.20041121a</h3>
  <ul>
@@ -171,29 +199,25 @@
  </ul>
 
  <h2>Feedback</h2>
+ <h3>Comments, suggestions, questions, criticism?</h3>
  <p class="first">
-  Comments, suggestions, questions, criticism?<br />
-  <a id="email" href="mailto:improbablyaspammer@schillmania.com">improbablyaspammer@schillmania.com</a><br />
-  <span style="color:#666666">(Note: This address might look funny with javascript disabled, but is still valid.)</span>
+   A few contact options are available. <a href="http://schillmania.com/content/react/contact/" title="Scott Schiller's contact information">Get in touch</a> via email or IM.
  </p>
 
- <h2>Web</h2>
+ <h2>Elsewhere On The Internets</h2>
  <p class="first">
-  <a href="http://www.schillmania.com"><img src="schill.gif" alt="schillmania.com" style="border:none" /></a><br />
-  schillmania.com
+  This is a side project by Scott Schiller. Wacky DHTML/javascript experiments and other nonsense can be found at <a href="http://www.schillmania.com/" title="Scott's personal experimental DHTML site">schillmania.com</a>.
  </p>
+
+ </div>
 
 </div>
 
-<!-- below is stats/counter stuff for my web site. You don't need this for the snow effect to work. -->
-<script type="text/javascript" src="http://www.reinvigorate.net/archive/app.bin/jsinclude.php?6024"></script>
+<!-- stats/counter stuff for my web site. You don't need this for the snow effect to work. -->
+<script type="text/javascript" src="http://include.reinvigorate.net/re_.js"></script>
 <script type="text/javascript">
-  function fixEmail() {
-    var e = document.getElementById('email');
-    e.href = e.href.replace(/improbablyaspammer/g,'scott');
-    e.innerHTML = e.innerHTML.replace(/improbablyaspammer/g,'scott');
-  }
-  addEventHandler(window,'load',fixEmail);
+re_('vq4zg-s08a9v69iv');
+if (navigator.userAgent.match(/msie 6/i)) $('special').style.display = 'inline';
 </script>
 
 </body>
