@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>DHTML SnowStorm: Basic Example</title>
+<script type="text/javascript" src="snowstorm.js"></script>
+<script type="text/javascript">
+snowStorm.snowColor = '#99ccff'; // blue-ish snow!?
+snowStorm.flakesMaxActive = 96;  // show more snow on screen at once
+snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
+</script>
+</head>
+
+<body style="background:#336699">
+
+<h1 style="font-size:1em;color:#fff">Example SnowStorm page</h1>
+
+<p style="font-size:1em;color:#fff">
+ A single Javascript reference in the &lt;head&gt; tag is required for SnowStorm to work.<br />
+ As well, some customized options are specified which override the SnowStorm defaults.<br />
+ View the source of this page for reference.
+</p>
+
+<pre style="color:#99ccff">
+&lt;!-- required snowstorm JS, default behaviour --&gt;
+&lt;script type="text/javascript" src="snowstorm.js"&gt;&lt;/script&gt;
+
+&lt;!-- now, we'll customize the snowStorm object --&gt;
+&lt;script type="text/javascript"&gt;
+snowStorm.snowColor = '#99ccff'; // blue-ish snow!?
+snowStorm.flakesMaxActive = 96;  // show more snow on screen at once
+snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
+&lt;/script&gt;
+</pre>
+
+</body>
+</html>

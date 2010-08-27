@@ -435,7 +435,7 @@ function XLSF(oTarget,urlBase) {
   var iMax = Math.floor((screenY-offset-16)/self.lightXY);
 
   for (j=0; j<jMax; j++) {
-    this.createLight('top',j%3,offset+j*self.lightXY,0);
+    this.createLight('top',parseInt(j/3)%4,offset+j*self.lightXY,0);
   }
 
   this.appendLights();
