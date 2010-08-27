@@ -2,9 +2,9 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>SCHILLMANIA! | DHTML Snowstorm Demo: Javascript snow effect using PNG with GIF fallback</title>
+<title>DHTML Snowstorm: Javascript snow effect using PNG with GIF fallback</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
-<meta name="description" content="On display: DHTML Snowstorm Demo: A Javascript snow effect using PNG with GIF fallback. The creative and technical work of Scott Schiller, also known as 'Schill'. This site focuses primarily on experimental DHTML-based design. Features include: DHTML Arkanoid, DHTML Scorched Earth, DHTML Panoramic Image Viewer, BoxLib, Christmas Light Smashfest, Ed The Rubber Chicken and a whole bunch of other experimentations with code." />
+<meta name="description" content="DHTML Snowstorm Demo: A Javascript snow effect using PNG with GIF fallback. The creative and technical work of Scott Schiller, also known as 'Schill'. This site focuses primarily on experimental DHTML-based design. Features include: DHTML Arkanoid, DHTML Scorched Earth, DHTML Panoramic Image Viewer, BoxLib, Christmas Light Smashfest, Ed The Rubber Chicken and a whole bunch of other experimentations with code." />
 <meta name="keywords" content="DHTML Snowstorm, DHTML snow, javascript snow, snow effect, Scott Schiller, Schill, Schillmania" />
 <meta name="robots" content="all" />
 <meta name="author" content="Scott Schiller" />
@@ -13,6 +13,7 @@
 <script type="text/javascript" src="script/addeventhandler.js"></script>
 <script type="text/javascript" src="script/png.js"></script>
 <script type="text/javascript" src="script/snowstorm.js"></script>
+<script type="text/javascript" src="http://www.reinvigorate.net/archive/app.bin/jsinclude.php?6024"></script>
 <link type="text/css" rel="stylesheet" href="demo_default.css" />
 </head>
 
@@ -21,7 +22,7 @@
 <div style="background-color:#333333;padding:16px;border:1px solid #666666">
 
  <h1>DHTML Snowstorm!</h1>
- <div>Version 1.1.20031206c</div>
+ <div>Version 1.2.20031213a - <span class="bright">Updated 12.13.2003</span></div>
  <div style="color:#666666">Code by Scott Schiller | schillmania.com</div>
 
  <p>
@@ -33,7 +34,7 @@
 
  <h2>Executive Summary</h2>
  
- <p>SnowStorm is a Javascript-driven snow effect that can be easily implemented into web pages.</p>
+ <p class="first">SnowStorm is a Javascript-driven snow effect that can be easily implemented into web pages.</p>
 
  <p>It has been designed as a component-based collection of code which can be reused in other projects where suitable. (Or in other words, this was how it was before I ripped it out of my site and broke it up into more manageable bits!)</p>
 
@@ -41,13 +42,13 @@
 
  <h2>Technical Notes</h2>
 
- <p>Works under most of the current major browsers (IE 5.x+, Netscape 6+). Testing has been limited to those browsers on PC/Mac. If you are seeing snow as you read this, then the script is working as expected.</p>
+ <p class="first">Works under most of the current major browsers (IE 5.x+, Netscape 6+). Testing has been limited to those browsers on PC/Mac. If you are seeing snow as you read this, then the script is working as expected.</p>
 
  <p>The snow script relies on a PNG handler class (defined in png.js) to add PNG functionality where applicable. Support for PNG can be removed easily enough also, if desired. Slower machines on IE:win32 may notice slightly improved performance when using GIF over PNG, but this has not been thoroughly tested.</p>
 
  <h2>Implementation</h2>
 
- <p>Three Javascript includes are required. Aside from customization and images, that's it.</p>
+ <p class="first">Three Javascript includes are required. Aside from customization and images, that's it.</p>
 
 <pre>
 &lt;script type="text/javascript" src="script/addeventhandler.js"&gt;&lt;/script&gt;
@@ -55,10 +56,12 @@
 &lt;script type="text/javascript" src="script/snowstorm.js"&gt;&lt;/script&gt;
 </pre>
 
- <h2>File Structure</h2>
+ <p class="first">You can view these files under the <a href="script/">script</a> directory.</p>
 
+ <h2>File Structure</h2>
+ <p class="first">The script looks for images according to the path detailed below.</p>
 <pre>
-/
+./
 + image/
   + snow/
     0.png
@@ -80,11 +83,11 @@
     snowstorm.js
 </pre>
 
- <p>The script expects to find snow images under ./image/snow/</p>
+ <p class="first">The script expects to find snow images under ./image/snow/</p>
 
  <h2>Configurable Properties</h2>
 
- <p>SnowStorm can be fairly easily customized; some of the major properties are listed below.</p>
+ <p class="first">SnowStorm can be fairly easily customized; some of the major properties are listed below.</p>
 
  <pre>
  usePNG
@@ -123,20 +126,56 @@
  ---------------
  Limits the "bottom" coordinate of the snow (if unspecified, snow
  "sticks" to bottom of browser window while scrolling/resizing etc.)
+
+ snowCollect
+ ---------------
+ Enables snow to pile up (slowly) at bottom of window.
+ Can be very CPU/resources intensive.
 </pre>
 
  <h2>Download</h2>
- <p><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">SnowStorm v1.1.20031206c</a> (Script + demo/example page)</a></p>
+ <p class="first">ZIP file, includes this demo page and source code.</p>
+
+ <p>
+  <h3>Newest version</h3>
+  <ul>
+   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">SnowStorm v1.2.20031213a</a></li>
+  </ul>
+ </p>
+
+ <p>
+  <h3>Older versions</h3>
+  <ul>
+   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">SnowStorm v1.1.20031206c</a></li>
+  </ul>
+ </p>
+
+ <h2>Version History</h2>
+ <p class="first">
+  <h3>1.2.20031213a</h3>
+  <ul>
+   <li>Netscape 6.x "sticky" snow behavior fixed (now works)</li>
+   <li>IE:mac bug event handler bug fixed (script should now work)</li>
+   <li>Snow collection feature added</li>
+   <li>Snowflake speed is relative to size (Cheap pseudo-3D effect)</li>
+  </ul>
+ </p>
+ <p>
+  <h3>1.1.20031206c</b></h3>
+  <ul>
+   <li>Initial release</li>
+  </ul>
+ </p>
 
  <h2>Feedback</h2>
- <p>
+ <p class="first">
   Comments, suggestions, questions, criticism?<br />
   <a href="mailto:spamluvr@ihatespam.dyndns.org">spamluvr@ihatespam.dyndns.org</a><br />
   <div style="color:#666666">(Note: Yes, this address <i>is</i> valid.)</div>
  </p>
 
  <h2>Web</h2>
-  <p>
+  <p class="first">
    <a href="http://www.schillmania.com"><img src="schill.gif" alt="schillmania.com" style="border:none" /></a><br />
    schillmania.com
   </p>
@@ -152,7 +191,7 @@ EXb=EXs.colorDepth:EXb=EXs.pixelDepth;//-->
 EXd=document;EXw?"":EXw="na";EXb?"":EXb="na";
 EXd.write("<img src=\"http://t0.extreme-dm.com",
 "/0.gif?tag=scotttmp&j=y&srw="+EXw+"&srb="+EXb+"&",
-"l="+escape(EXd.referrer)+"\" height=1 width=1>");//-->
+"l="+(escape(EXd.referrer)||escape(EXw.location))+"\" height=1 width=1>");//-->
 </script><noscript><img height=1 width=1 alt=""
 src="http://t0.extreme-dm.com/0.gif?tag=scotttmp&j=n"></noscript>
 </div>

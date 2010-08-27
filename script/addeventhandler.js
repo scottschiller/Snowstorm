@@ -1,6 +1,6 @@
 // Generic addEventHandler() wrapper
 // ---------------------------------
-// Version 1.0.20031206
+// Version 1.1.20031213
 // A generic interface for adding DOM event handlers
 //
 // Code by Scott Schiller | schillmania.com
@@ -27,15 +27,19 @@ function removeEventHandlerIE(o,eventType,eventHandler) {
   o.detachEvent(eventType,eventHandler);
 }
   
-if (document.addEventListener) {
-  // DOM event handler method
+if (document.addEventListener) { // DOM event handler method
   addEventHandler = addEventHandlerDOM;
   removeEventHandler = removeEventHandlerDOM;
-} else if (document.attachEvent) {
-  // IE event handler method
+} else if (document.attachEvent) { // IE event handler method
   addEventHandler = addEventHandlerIE;
   removeEventHandler = removeEventHandlerIE;
-} else {
-  // not supported
-  addEventHandler = function() {}
+} else { // Neither "DOM level 2" (?) methods supported
+  addEventHandler = function(o,eventType,eventHandler,eventBubble) {
+    o['on'+eventType] = eventHandler;
+    // Multiple events could be added here via array etc.
+  }
+  removeEventHandler = function() {}
 }
+
+// Safari 1.0 does not support window.scroll events - apparently netscape 6.0/6.2 and mozilla 1.4 also.
+// Refer to events support table at http://www.quirksmode.org/js/events_compinfo.html

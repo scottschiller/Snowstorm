@@ -1,6 +1,6 @@
 // DHTML PNG Snowstorm! OO-style Jascript-based Snowstorm
 // --------------------------------------------------------
-// Version 1.1.20031206c
+// Version 1.2.20031213a
 // Dependencies: png.js, addeventhandler.js
 // Code by Scott Schiller - www.schillmania.com
 // --------------------------------------------------------
@@ -45,30 +45,39 @@
 // flakeBottom
 // ---------------
 // Limits the "bottom" coordinate of the snow.
+//
+// snowCollect
+// ---------------
+// Enables snow to pile up (slowly) at bottom of window.
+// Can be very CPU/resource-intensive over time.
 
 
 var snowStorm = null;
 
 function SnowStorm() {
   var s = this;
+  var storm = this;
   this.timers = [];
   this.flakes = [];
   this.disabled = false;
+  this.terrain = [];
 
   // User-configurable variables
   // ---------------------------
 
   var usePNG = true;
   var flakeTypes = 6;
-  var flakesMax = 48;
-  var flakesMaxActive = 16;
-  var vMax = 3;
+  var flakesMax = 128;
+  var flakesMaxActive = 64;
+  var vMax = 2.5;
   var flakeWidth = 5;
   var flakeHeight = 5;
   var flakeBottom = null; // Integer for fixed bottom, 0 or null for "full-screen" snow effect
+  var snowCollect = true;
 
   // --- End of user section ---
 
+  var isIE = (navigator.appName.toLowerCase().indexOf('internet explorer')+1);
   var isWin9X = (navigator.appVersion.toLowerCase().indexOf('windows 98')+1);
   var screenX = null;
   var screenY = null;
@@ -96,47 +105,71 @@ function SnowStorm() {
   }
 
   this.resizeHandler = function() {
-    screenX = document.documentElement.clientWidth||document.body.clientWidth||window.innerWidth;
-    screenY = flakeBottom?flakeBottom:(document.documentElement.clientHeight||document.body.clientHeight||window.innerHeight);
+    if (window.innerWidth || window.innerHeight) {
+      screenX = window.innerWidth-(!isIE?24:2);
+      screenY = (flakeBottom?flakeBottom:window.innerHeight);
+    } else {
+      screenX = (document.documentElement.clientWidth||document.body.clientWidth||document.body.scrollWidth)-(!isIE?8:0);
+      screenY = flakeBottom?flakeBottom:(document.documentElement.clientHeight||document.body.clientHeight||document.body.scrollHeight);
+    }
     s.scrollHandler();
   }
 
   this.scrollHandler = function() {
     // "attach" snowflakes to bottom of window if no absolute bottom value was given
-    scrollY = parseInt(document.documentElement.scrollTop||window.scrollY||document.body.scrollTop);
+    scrollY = (flakeBottom?0:parseInt(window.scrollY||document.documentElement.scrollTop||document.body.scrollTop));
+    if (isNaN(scrollY)) scrollY = 0; // Netscape 6 scroll fix
     if (!flakeBottom && s.flakes) {
       for (var i=0; i<s.flakes.length; i++) {
-        if (!s.flakes[i].active) s.flakes[i].stick();
+        if (s.flakes[i].active == 0) s.flakes[i].stick();
       }
     }
   }
 
-  this.stop = function() {
-    if (!this.disabled) {
-      this.disabled = 1;
+  this.freeze = function() {
+    // pause animation
+    if (!s.disabled) {
+      s.disabled = 1;
     } else {
       return false;
     }
     if (!isWin9X) {
-      clearInterval(this.timers);
+      clearInterval(s.timers);
     } else {
-      for (var i=0; i<this.timers.length; i++) {
-        clearInterval(this.timers[i]);
+      for (var i=0; i<s.timers.length; i++) {
+        clearInterval(s.timers[i]);
       }
     }
+  }
+
+  this.resume = function() {
+    if (s.disabled) {
+       s.disabled = 0;
+    } else {
+      return false;
+    }
+    s.timerInit();
+  }
+
+  this.stop = function() {
+    this.freeze();
     for (var i=0; i<this.flakes.length; i++) {
       this.flakes[i].o.style.display = 'none';
     }
     removeEventHandler(window,'scroll',this.scrollHandler,false);
+    removeEventHandler(window,'resize',this.resizeHandler,false);
   }
 
-  this.SnowFlake = function(type,x,y) {
+  this.SnowFlake = function(parent,type,x,y) {
     var s = this;
+    var storm = parent;
     this.type = type;
     this.x = x||parseInt(rnd(screenX-12));
     this.y = (!isNaN(y)?y:-12);
     this.vX = null;
     this.vY = null;
+    this.vAmpTypes = [2.0,1.0,1.25,1.0,1.5,1.75]; // "amplification" for vX/vY (based on flake size/type)
+    this.vAmp = this.vAmpTypes[this.type];
 
     this.active = 1;
     this.o = document.createElement('img');
@@ -155,7 +188,8 @@ function SnowStorm() {
     }
 
     this.stick = function() {
-      s.o.style.top = (screenY+scrollY-flakeHeight)+'px';
+      s.o.style.top = (screenY+scrollY-flakeHeight-storm.terrain[Math.floor(this.x)])+'px';
+      // called after relative left has been called
     }
 
     this.vCheck = function() {
@@ -171,7 +205,7 @@ function SnowStorm() {
 
     this.move = function() {
       this.x += this.vX;
-      this.y += this.vY;
+      this.y += (this.vY*this.vAmp);
       this.refresh();
 
       if (this.vX && screenX-this.x<flakeWidth+this.vX) { // X-axis scroll check
@@ -179,9 +213,16 @@ function SnowStorm() {
       } else if (this.vX<0 && this.x<0-flakeWidth) {
         this.x = screenX-flakeWidth; // flakeWidth;
       }
-      if ((screenY+scrollY)-this.y<flakeHeight) {
+      var yDiff = screenY+scrollY-this.y-storm.terrain[Math.floor(this.x)];
+      if (yDiff<flakeHeight) {
         this.active = 0;
-        this.o.style.left = (this.x/screenX*100)+'%'; // set "relative" left (change with resize)
+        if (snowCollect) {
+          var height = [0.75,1.5,0.75];
+          for (var i=0; i<2; i++) {
+            storm.terrain[Math.floor(this.x)+i+2] += height[i];
+          }
+        }
+        this.o.style.left = ((this.x-(!isIE?flakeWidth:0))/screenX*100)+'%'; // set "relative" left (change with resize)
         if (!flakeBottom) {
           this.stick();
         }
@@ -214,30 +255,56 @@ function SnowStorm() {
 
   this.snow = function() {
     var active = 0;
+    var used = 0;
+    var waiting = 0;
     for (var i=this.flakes.length-1; i>0; i--) {
-      if (this.flakes[i].active) {
+      if (this.flakes[i].active == 1) {
         this.flakes[i].animate();
         active++;
+      } else if (this.flakes[i].active == 0) {
+        used++;
+      } else {
+        waiting++;
       }
     }
-    if (active<flakesMaxActive && this.flakes.length<flakesMax && parseInt(rnd(2))==1) {
-      this.flakes[this.flakes.length] = new this.SnowFlake(parseInt(rnd(12)));
-    } else if (active<flakesMaxActive && this.flakes.length>=flakesMax) {
+    if (snowCollect && !waiting) { // !active && !waiting
+      // create another batch of snow
+      this.createSnow(flakesMaxActive*2,true);
+    }
+    if (active<flakesMaxActive) {
       with (this.flakes[parseInt(rnd(this.flakes.length))]) {
-        if (!active) recycle();
+        if (!snowCollect && active == 0) {
+          recycle();
+        } else if (active == -1) {
+          active = 1;
+        }
       }
     }
+  }
 
+  this.createSnow = function(limit,allowInactive) {
+    for (var i=0; i<limit; i++) {
+      this.flakes[this.flakes.length] = new this.SnowFlake(this,parseInt(rnd(flakeTypes)));
+      if (allowInactive || i>flakesMaxActive) this.flakes[this.flakes.length-1].active = -1;
+    }
+  }
+
+  this.timerInit = function() {
+    this.timers = (!isWin9X?setInterval("snowStorm.snow()",20):[setInterval("snowStorm.snow()",75),setInterval("snowStorm.snow()",25)]);
   }
 
   this.init = function() {
-    this.randomizeWind();
-    for (var i=0; i<flakesMax; i++) {
-      this.flakes[this.flakes.length] = new this.SnowFlake(parseInt(rnd(flakeTypes)));
+    for (var i=0; i<8192; i++) {
+      this.terrain[i] = 0;
     }
-    this.timers = (!isWin9X?setInterval("snowStorm.snow()",20):[setInterval("snowStorm.snow()",75),setInterval("snowStorm.snow()",25)]);
+    this.randomizeWind();
+    this.createSnow(snowCollect?flakesMax:flakesMaxActive*2); // create initial batch
     addEventHandler(window,'resize',this.resizeHandler,false);
     addEventHandler(window,'scroll',this.scrollHandler,false);
+    // addEventHandler(window,'scroll',this.resume,false); // scroll does not cause window focus. (odd)
+    // addEventHandler(window,'blur',this.freeze,false);
+    // addEventHandler(window,'focus',this.resume,false);
+    this.timerInit();
   }
 
   this.resizeHandler(); // get screen coordinates

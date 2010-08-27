@@ -14,7 +14,7 @@ a:hover {
  color:#ffff33;
 }
 
-h1, h2 {
+h1, h2, h3 {
  margin:0px;
 }
 
@@ -24,19 +24,40 @@ h1 {
 
 h2 {
  font-size:1.2em;
- margin-top:10px;
+ margin-top:16px;
  color:#99ccff;
+}
+
+h3 {
+ font-size:1.0em;
+ margin-top:0px;
+ color:#999999;
 }
 
 p {
  margin:1em 0px 0px 0px;
 }
 
+p.first {
+ margin-top:0.25em;
+}
+
 pre {
  font-size:1em;
- color:#ccddee;
+ color:#66ee66;
 }
 
 div>pre {
  font-size:1.2em;
+}
+
+ul {
+ margin-left:16px;
+ padding-left:0px;
+ margin-top:5px;
+ margin-bottom:5px;
+}
+
+.bright {
+ color:#ff6666;
 }
