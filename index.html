@@ -4,7 +4,7 @@
 <head>
 <title>DHTML Snowstorm: Javascript snow effect using PNG with GIF fallback</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
-<meta name="description" content="DHTML Snowstorm Demo: A Javascript snow effect using PNG with GIF fallback. The creative and technical work of Scott Schiller, also known as 'Schill'. This site focuses primarily on experimental DHTML-based design. Features include: DHTML Arkanoid, DHTML Scorched Earth, DHTML Panoramic Image Viewer, BoxLib, Christmas Light Smashfest, Ed The Rubber Chicken and a whole bunch of other experimentations with code." />
+<meta name="description" content="DHTML Snowstorm Demo: A Javascript snow effect using PNG with GIF fallback. The creative and technical work of Scott Schiller, also known as 'Schill'." />
 <meta name="keywords" content="DHTML Snowstorm, DHTML snow, javascript snow, snow effect, Scott Schiller, Schill, Schillmania" />
 <meta name="robots" content="all" />
 <meta name="author" content="Scott Schiller" />
@@ -12,29 +12,18 @@
 <meta name="language" content="en-us" />
 <link type="text/css" rel="stylesheet" href="demo_default.css" />
 
-<!-- Copy the SnowStorm script block below into your own page(s) for the snow effect. That is all! (No CSS etc. is needed) -->
-
-<!-- SnowStorm script block  -->
-<script type="text/javascript" src="script/addeventhandler.js"></script>
-<script type="text/javascript" src="script/png.js"></script>
+<!-- Copy the <script> tag into your own page(s) for the snow effect. That is all! (No CSS etc. is needed) -->
 <script type="text/javascript" src="script/snowstorm.js"></script>
-<!-- /SnowStorm script block -->
-
-<!-- Counter + e-mail stuff specific to this demo page. You don't need this, gentle reader! ;) -->
-<script type="text/javascript" src="http://www.reinvigorate.net/archive/app.bin/jsinclude.php?6024"></script>
-<script type="text/javascript">function ihatespamInit() {var a = 'snowstorm';a+='@'+'schillmania'+'.com';document.getElementById('mail').innerHTML = a;}addEventHandler(window,'load',ihatespamInit,false);function ihatespam(o) {window.location.href='mailto:'+o.innerHTML;}</script>
-<!-- /Counter + e-mail stuff -->
 
 </head>
 
 <body>
 
-<div style="background-color:#333333;padding:16px;border:1px solid #666666">
+<div id="container">
 
  <h1>DHTML Snowstorm!</h1>
-
- <div>Version 1.2.20031218a - <span class="bright">Updated 12.18.2003</span></div>
- <div style="color:#8899aa">Code by Scott Schiller | <a href="http://www.schillmania.com">schillmania.com</a></div>
+ <div>Version 1.2.20041121a - <span class="bright">Updated 11.21.2004</span></div>
+ <div style="color:#666666">Code by Scott Schiller | schillmania.com</div>
 
  <p>
   <a href="javascript:snowStorm.randomizeWind()">Change Wind</a><br />
@@ -42,42 +31,44 @@
  </p>
 
  <h2>Latest Changes</h2>
-
  <ul>
-  <li>Opera 7 ("O7") support added.. I think.</li>
-  <li>Improved initialization speed (less snowflake objects on startup)</li>
-  <li>Err.. That's about it.</li>
+  <li>Script moved into one file (snowstorm.js) for simplicity</li>
+  <li>addEventHandler and PNG support functions updated</li>
  </ul>
 
  <h2>Executive Summary</h2>
+
+ <h3 class="noTop">So, you want Javascript snow on your web site, eh?</h3>
  
  <p class="first">SnowStorm is a Javascript-driven snow effect that can be easily implemented into web pages.</p>
 
- <p>It has been designed as a component-based collection of code which can be reused in other projects where suitable. (Or in other words, this was how it was before I ripped it out of my site and broke it up into more manageable bits!)</p>
+ <p>It has been designed to be easy to use. A single Javascript file provides the functionality required; the only other files needed are the images of snowflakes themselves.</p>
 
- <p>Thanks to the PNG format and a "wrapper" class written to support it, the benefits of alpha transparency can be seen on most browsers with this implementation. IE requires the use of a proprietary DXFilter to properly display PNG images with alpha transparency, but this is handled "automagically" by the PNG wrapper class.</p>
+ <h3>I'd like to use this on my site.</h3>
+
+ <p class="first">See this <a href="basic-example.html">basic example</a> for reference.</p>
 
  <h2>Technical Notes</h2>
 
- <p class="first">Works under most of the current major browsers (IE 5.x+, Netscape 6+). Testing has been limited to those browsers on PC/Mac. If you are seeing snow as you read this, then the script is working as expected.</p>
+ <p class="first">SnowStorm works under most of the current major browsers (IE 5.x+, Netscape 6+). Testing has been limited to those browsers on PC/Mac. If you are seeing snow as you read this, then the script is working as expected.</p>
 
- <p>The snow script relies on a PNG handler class (defined in png.js) to add PNG functionality where applicable. Support for PNG can be removed easily enough also, if desired. Slower machines on IE:win32 may notice slightly improved performance when using GIF over PNG, but this has not been thoroughly tested.</p>
+ <p>Thanks to the PNG format and a "wrapper" class written to support it, the benefits of alpha transparency can be seen on most browsers with this implementation. IE requires the use of a proprietary DXFilter to properly display PNG images with alpha transparency, but this is handled "automagically" by the PNG wrapper class.</p>
+
+ <p>The snow script relies on a PNG handler class to add PNG functionality where applicable. Support for PNG can be removed easily enough also, if desired. Slower machines on IE:win32 may notice slightly improved performance when using GIF over PNG, but this has not been thoroughly tested.</p>
 
  <h2>Implementation</h2>
 
- <p class="first">Three Javascript includes are required. Aside from customization and images, that's it.</p>
+ <p class="first">One Javascript reference is required. Aside from customization and images, that's it.</p>
 
 <pre>
-&lt;script type="text/javascript" src="script/addeventhandler.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="script/png.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="script/snowstorm.js"&gt;&lt;/script&gt;
 </pre>
 
- <p class="first">You can view these files under the <a href="script/">script</a> directory.</p>
+ <p class="first">This file is viewable under the <a href="script/">script</a> directory.</p>
 
  <h2>File Structure</h2>
+ <p class="first">The script looks for snow images under ./image/snow/ by default as shown below. If desired, this can be changed in the user-configurable section.</p>
 
- <p class="first">The script looks for images according to the path detailed below.</p>
 <pre>
 ./
 + image/
@@ -96,80 +87,70 @@
     5.gif
     none.gif
 + script/
-    addeventhandler.js
-    png.js
     snowstorm.js
 </pre>
-
- <p class="first">The script expects to find snow images under ./image/snow/</p>
 
  <h2>Configurable Properties</h2>
 
  <p class="first">SnowStorm can be fairly easily customized; some of the major properties are listed below.</p>
 
- <pre>
- usePNG
- ---------------
- Enables PNG images if supported ("false" disables all PNG usage)
- 
- flakeTypes
- ---------------
- Sets the range of flake images to use (eg. a value of 5 will use
- images ranging from 0.png to 4.png.)
- 
- flakesMax
- ---------------
- Sets the maximum number of snowflakes that can exist on the screen
- at any given time.
-  
- flakesMaxActive
- ---------------
- Sets the limit of "falling" snowflakes (ie. moving, thus they are
- considered to be "active".)
- 
- vMax
- ---------------
- Defines the maximum X and Y velocities for the storm.
- A range up to this value is selected at random.
- 
- flakeWidth
- ---------------
- The width (in pixels) of each snowflake image.
- 
- flakeHeight
- ---------------
- Height (pixels) of each snowflake image.
- 
- flakeBottom
- ---------------
- Limits the "bottom" coordinate of the snow (if unspecified, snow
- "sticks" to bottom of browser window while scrolling/resizing etc.)
+ <dl>
 
- snowCollect
- ---------------
- Enables snow to pile up (slowly) at bottom of window.
- Can be very CPU/resources intensive.
-</pre>
+  <dt><code>usePNG</code></dt>
+  <dd><em>Enables PNG images if supported. <code>false</code> disables all PNG usage and uses GIFs - may run slightly faster on older systems.</em></dd>
+
+  <dt><code>imagePath</code></dt>
+  <dd><em>The relative path to the snowflake PNG/GIF images. eg. <code>image/snow/</code> (note the trailing slash - important)</em></dd>
+
+  <dt><code>flakeTypes</code></dt>
+  <dd><em>Sets the range of snowflake images to use. eg. a value of <code>5</code> will use images ranging from <code>0.png</code> (or .gif) to <code>4.png</code>.</em></dd>
+
+  <dt><code>flakesMax</code></dt>
+  <dd><em>Sets the maximum number of snowflakes that can exist on the screen at any given time.</em></dd>
+
+  <dt><code>flakesMaxActive</code></dt>
+  <dd><em>Sets the limit of "falling" snowflakes (ie. moving on the screen, thus considered to be active.)</em></dd>
+
+  <dt><code>vMax</code></dt>
+  <dd><em>Defines the maximum X and Y velocities for the storm; a random value in this range is selected for each snowflake.</em></dd>
+
+  <dt><code>flakeWidth</code></dt>
+  <dd><em>Width (pixels) allocated for ech snowflake image.</em></dd>
+
+  <dt><code>flakeHeight</code></dt>
+  <dd><em>Height (pixels) allocated for each snowflake image.</em></dd>
+
+  <dt><code>flakeBottom</code></dt>
+  <dd><em>Limits the "floor" (pixels) of the snow. If unspecified, snow will "stick" to the bottom of the browser window and persists through browser resize/scrolling.</em></dd>
+
+  <dt><code>snowCollect</code></dt>
+  <dd><em>Specifies whether or not snow should be allowed to stack and pile up. Can eventually be very CPU-intensive.</em></dd>
+
+ </dl>
 
  <h2>Download</h2>
-
  <p class="first">ZIP file, includes this demo page and source code.</p>
 
  <ul>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031218a.zip">SnowStorm v1.2.20031218a</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20041121a.zip">SnowStorm v1.2.20041121a</a></li>
  </ul>
 
  <h3>Older versions</h3>
-
  <ul>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031218a.zip">SnowStorm v1.2.20031218a</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">SnowStorm v1.2.20031213a</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">SnowStorm v1.1.20031206c</a></li>
  </ul>
 
  <h2>Version History</h2>
 
- <h3>1.2.20031218a</h3>
+ <h3>1.2.20041121a</h3>
+ <ul>
+  <li>Script moved into one file (snowstorm.js) for simplicity</li>
+  <li>addEventHandler and PNG support functions updated</li>
+ </ul>
 
+ <h3>1.2.20031218a</h3>
  <ul>
   <li>Opera 7 ("O7") support added.. I think.</li>
   <li>Improved initialization speed (less snowflake objects on startup)</li>
@@ -177,7 +158,6 @@
  </ul>
 
  <h3>1.2.20031213a</h3>
-
  <ul>
   <li>Netscape 6.x "sticky" snow behavior fixed (now works)</li>
   <li>IE:mac bug event handler bug fixed (script should now work)</li>
@@ -186,7 +166,6 @@
  </ul>
 
  <h3>1.1.20031206c</h3>
-
  <ul>
   <li>Initial release</li>
  </ul>
@@ -194,8 +173,8 @@
  <h2>Feedback</h2>
  <p class="first">
   Comments, suggestions, questions, criticism?<br />
-  <a id="mail" href="#" onclick="ihatespam(this);return false">e-mail</a><br />
-  <!--div style="color:#666666">(Note: Yes, this address <i>is</i> valid.)</div-->
+  <a id="email" href="mailto:improbablyaspammer@schillmania.com">improbablyaspammer@schillmania.com</a><br />
+  <span style="color:#666666">(Note: This address might look funny with javascript disabled, but is still valid.)</span>
  </p>
 
  <h2>Web</h2>
@@ -205,6 +184,17 @@
  </p>
 
 </div>
+
+<!-- below is stats/counter stuff for my web site. You don't need this for the snow effect to work. -->
+<script type="text/javascript" src="http://www.reinvigorate.net/archive/app.bin/jsinclude.php?6024"></script>
+<script type="text/javascript">
+  function fixEmail() {
+    var e = document.getElementById('email');
+    e.href = e.href.replace(/improbablyaspammer/g,'scott');
+    e.innerHTML = e.innerHTML.replace(/improbablyaspammer/g,'scott');
+  }
+  addEventHandler(window,'load',fixEmail);
+</script>
 
 </body>
 </html>

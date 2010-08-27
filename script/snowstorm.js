@@ -1,56 +1,58 @@
-// DHTML PNG Snowstorm! OO-style Jascript-based Snowstorm
-// --------------------------------------------------------
-// Version 1.2.20031218a
-// Dependencies: png.js, addeventhandler.js
-// Code by Scott Schiller - www.schillmania.com
-// --------------------------------------------------------
-// Description:
-//
-// Initializes after body onload() by default (via addEventHandler() call at bottom.)
-//
-// Properties:
-//
-// usePNG
-// ---------------
-// Enables PNG images if supported ("false" disables all PNG usage)
-//
-// flakeTypes
-// ---------------
-// Sets the range of flake images to use (eg. a value of 5
-// will use images ranging from 0.png to 4.png.)
-//
-// flakesMax
-// ---------------
-// Sets the maximum number of snowflakes that can exist on
-// the screen at any given time.
-// 
-// flakesMaxActive
-// ---------------
-// Sets the limit of "falling" snowflakes (ie. moving, thus
-// considered to be "active".)
-//
-// vMax
-// ---------------
-// Defines the maximum X and Y velocities for the storm.
-// A range up to this value is selected at random.
-//
-// flakeWidth
-// ---------------
-// The width (in pixels) of each snowflake image.
-//
-// flakeHeight
-// ---------------
-// Height (pixels) of each snowflake image.
-// 
-// flakeBottom
-// ---------------
-// Limits the "bottom" coordinate of the snow.
-//
-// snowCollect
-// ---------------
-// Enables snow to pile up (slowly) at bottom of window.
-// Can be very CPU/resource-intensive over time.
+/*
+   DHTML PNG Snowstorm! OO-style Jascript-based Snow effect
+   --------------------------------------------------------
+   Version 1.2.20041121a
+   Dependencies: GIF/PNG images (0 through 4.gif/png)
+   Code by Scott Schiller - www.schillmania.com
+   --------------------------------------------------------
+   Description:
+  
+   Initializes after body onload() by default (via addEventHandler() call at bottom.)
+  
+   Properties:
+  
+   usePNG
+   ---------------
+   Enables PNG images if supported ("false" disables all PNG usage)
+  
+   flakeTypes
+   ---------------
+   Sets the range of flake images to use (eg. a value of 5
+   will use images ranging from 0.png to 4.png.)
+  
+   flakesMax
+   ---------------
+   Sets the maximum number of snowflakes that can exist on
+   the screen at any given time.
+   
+   flakesMaxActive
+   ---------------
+   Sets the limit of "falling" snowflakes (ie. moving, thus
+   considered to be "active".)
+  
+   vMax
+   ---------------
+   Defines the maximum X and Y velocities for the storm.
+   A range up to this value is selected at random.
+  
+   flakeWidth
+   ---------------
+   The width (in pixels) of each snowflake image.
+  
+   flakeHeight
+   ---------------
+   Height (pixels) of each snowflake image.
+   
+   flakeBottom
+   ---------------
+   Limits the "bottom" coordinate of the snow.
+  
+   snowCollect
+   ---------------
+   Enables snow to pile up (slowly) at bottom of window.
+   Can be very CPU/resource-intensive over time.
 
+*/
 
 var snowStorm = null;
 
@@ -66,6 +68,7 @@ function SnowStorm() {
   // ---------------------------
 
   var usePNG = true;
+  var imagePath = 'image/snow/'; // relative path to snow images
   var flakeTypes = 6;
   var flakesMax = 128;
   var flakesMaxActive = 64;
@@ -181,9 +184,9 @@ function SnowStorm() {
     this.o.style.height = flakeHeight+'px';
     this.o.style.fontSize = '1px'; // so IE keeps proper size
     this.o.style.zIndex = 2;
-    this.o.src = 'image/snow/'+this.type+(pngHandler.transform && usePNG?'.png':'.gif');
+    this.o.src = imagePath+this.type+(pngHandler.supported && usePNG?'.png':'.gif');
     document.body.appendChild(this.o);
-    if (pngHandler.transform && usePNG) pngHandler.transform(this.o);
+    if (pngHandler.supported && usePNG) pngHandler.transform(this.o);
 
     this.refresh = function() {
       this.o.style.left = this.x+'px';
@@ -323,5 +326,232 @@ function SnowStorm() {
 function snowStormInit() {
   setTimeout("snowStorm = new SnowStorm()",500);
 }
+
+// Generic addEventHandler() wrapper
+// ---------------------------------
+// A generic interface for adding DOM event handlers
+// Version 1.2.20040404
+//
+// Code by Scott Schiller | schillmania.com
+//
+// Revision history:
+// ---------------------------------
+// v1.1.20031218: initial deploy
+// v1.2.20040404: added post-load event check
+
+var addEventHandler = null;
+var removeEventHandler = null;
+
+function postLoadEvent(eventType) {
+  // test for adding an event to the body (which has already loaded) - if so, fire immediately
+  return ((eventType.toLowerCase().indexOf('load')>=0) && document.body);
+}
+
+function addEventHandlerDOM(o,eventType,eventHandler,eventBubble) {
+  if (!postLoadEvent(eventType)) {
+    o.addEventListener(eventType,eventHandler,eventBubble);
+  } else {
+    eventHandler();
+  }
+}
+
+function removeEventHandlerDOM(o,eventType,eventHandler,eventBubble) {
+  o.removeEventListener(eventType,eventHandler,eventBubble);
+}
+  
+function addEventHandlerIE(o,eventType,eventHandler) { // IE workaround
+  if (!eventType.indexOf('on')+1) eventType = 'on'+eventType;
+  if (!postLoadEvent(eventType)) {
+    o.attachEvent(eventType,eventHandler); // Note addition of "on" to event type
+  } else {
+    eventHandler();
+  }
+}
+  
+function removeEventHandlerIE(o,eventType,eventHandler) {
+  if (!eventType.indexOf('on')+1) eventType = 'on'+eventType;
+  o.detachEvent(eventType,eventHandler);
+}
+
+function addEventHandlerOpera(o,eventType,eventHandler,eventBubble) {
+  if (!postLoadEvent(eventType)) {
+    (o==window?document:o).addEventListener(eventType,eventHandler,eventBubble);
+  } else {
+    eventHandler();
+  }
+}
+
+function removeEventHandlerOpera(o,eventType,eventHandler,eventBubble) {
+  (o==window?document:o).removeEventListener(eventType,eventHandler,eventBubble);
+}
+
+if (navigator.userAgent.toLowerCase().indexOf('opera ')+1 || navigator.userAgent.toLowerCase().indexOf('opera/')+1) {
+  // opera is dumb at times.
+  addEventHandler = addEventHandlerOpera;
+  removeEventHandler = removeEventHandlerOpera;
+} else if (document.addEventListener) { // DOM event handler method
+  addEventHandler = addEventHandlerDOM;
+  removeEventHandler = removeEventHandlerDOM;
+} else if (document.attachEvent) { // IE event handler method
+  addEventHandler = addEventHandlerIE;
+  removeEventHandler = removeEventHandlerIE;
+} else { // Neither "DOM level 2" (?) methods supported
+  addEventHandler = function(o,eventType,eventHandler,eventBubble) {
+    o['on'+eventType] = eventHandler;
+    // Multiple events could be added here via array etc.
+  }
+  removeEventHandler = function(o,eventType,eventHandler,eventBubble) {}
+}
+
+// Safari 1.0 does not support window.scroll events - apparently netscape 6.0/6.2 and mozilla 1.4 also.
+// Refer to events support table at http://www.quirksmode.org/js/events_compinfo.html
+
+// -- end addEventHandler definition --
+
+/*
+   PNGHandler: Object-Oriented Javascript-based PNG wrapper
+   --------------------------------------------------------
+   Version 1.2.20040803
+   Code by Scott Schiller - www.schillmania.com
+   --------------------------------------------------------
+   Description:
+   Provides gracefully-degrading PNG functionality where
+   PNG is supported natively or via filters (Damn you, IE!)
+   Should work with PNGs as images and DIV background images.
+   --------------------------------------------------------
+   Revision history
+   --------------------------------------------------------
+   1.2
+   - Added refresh() for changing PNG images under IE
+   - Class extension: "scale" causes PNG to scale under IE
+   --------------------------------------------------------
+   Known bugs
+   --------------------------------------------------------
+   - ie:mac doesn't support PNG background images.
+   - Safari doesn't support currentStyle() - can't parse BG
+     via CSS (ie. for a DIV with a PNG background by class)
+
+*/
+
+function PNGHandler() {
+  var self = this;
+
+  this.na = navigator.appName.toLowerCase();
+  this.nv = navigator.appVersion.toLowerCase();
+  this.isIE = this.na.indexOf('internet explorer')+1?1:0;
+  this.isWin = this.nv.indexOf('windows')+1?1:0;
+  this.isIEMac = (this.isIE&&!this.isWin);
+  this.isIEWin = (this.isIE&&this.isWin);
+  this.ver = this.isIE?parseFloat(this.nv.split('msie ')[1]):parseFloat(this.nv);
+  this.isMac = this.nv.indexOf('mac')+1?1:0;
+  this.isOpera = (navigator.userAgent.toLowerCase().indexOf('opera ')+1 || navigator.userAgent.toLowerCase().indexOf('opera/')+1);
+  if (this.isOpera) this.isIE = false; // Opera filter catch (which is sneaky, pretending to be IE by default)
+  this.filterID = 'DXImageTransform.Microsoft.AlphaImageLoader';
+  this.supported = false;
+  this.transform = self.doNothing;
+
+  this.filterMethod = function(o) {
+    // IE 5.5+ proprietary filter garbage (boo!)
+    // Create new element based on old one. Doesn't seem to render properly otherwise (due to filter?)
+    // use DOM "currentStyle" method, so rules inherited via CSS are picked up.
+    if (o.nodeName != 'IMG') {
+      var b = o.currentStyle.backgroundImage.toString(); // parse out background image URL
+      o.style.backgroundImage = 'none';
+      // Parse out background image URL from currentStyle.
+      var i1 = b.indexOf('url("')+5;
+      var newSrc = b.substr(i1,b.length-i1-2).replace('.gif','.png'); // find first instance of ") after (", chop from string
+      o.style.writingMode = 'lr-tb'; // Has to be applied so filter "has layout" and is displayed. Seriously. Refer to http://msdn.microsoft.com/workshop/author/filter/reference/filters/alphaimageloader.asp?frame=true
+      o.style.filter = "progid:"+self.filterID+"(src='"+newSrc+"',sizingMethod='"+(o.className.indexOf('scale')+1?'scale':'crop')+"')";
+    } else if (o.nodeName == 'IMG') {
+      var newSrc = o.getAttribute('src').replace('.gif','.png');
+      // apply filter
+      o.src = 'image/none.gif'; // get rid of image
+      o.style.filter = "progid:"+self.filterID+"(src='"+newSrc+"',sizingMethod="+(o.className.indexOf('scale')+1?'scale':'crop')+"')";
+      o.style.writingMode = 'lr-tb'; // Has to be applied so filter "has layout" and is displayed. Seriously. Refer to http://msdn.microsoft.com/workshop/author/filter/reference/filters/alphaimageloader.asp?frame=true
+    }
+  }
+
+  this.pngMethod = function(o) {
+    // Native transparency support. Easy to implement. (woo!)
+    bgImage = this.getBackgroundImage(o);
+    if (bgImage) {
+      // set background image, replacing .gif
+      o.style.backgroundImage = 'url('+bgImage.replace('.gif','.png')+')';
+    } else if (o.nodeName == 'IMG') {
+      o.src = o.src.replace('.gif','.png');
+    } else if (!bgImage) {
+      // no background image
+    }
+  }
+
+  this.getBackgroundImage = function(o) {
+    var b, i1; // background-related variables
+    var bgUrl = null;
+    if (o.nodeName != 'IMG' && !(this.isIE && this.isMac)) { // ie:mac PNG support broken for DIVs with PNG backgrounds
+      if (document.defaultView) {
+        if (document.defaultView.getComputedStyle) {
+          b = document.defaultView.getComputedStyle(o,'').getPropertyValue('background-image');
+          i1 = b.indexOf('url(')+4;
+          bgUrl = b.substr(i1,b.length-i1-1);
+        } else {
+          // no computed style
+          return false;
+        }
+      } else {
+        // no default view
+        return false;
+      }
+    }
+    return bgUrl;
+  }
+
+  this.doNothing = function() {}
+  
+  this.supportTest = function() {
+    // Determine method to use.
+    // IE 5.5+/win32: filter
+
+    if (this.isIE && this.isWin && this.ver >= 5.5) {
+      // IE proprietary filter method (via DXFilter)
+      self.transform = self.filterMethod;
+    } else if (!this.isIE && this.ver < 5) {
+      // No PNG support or broken support
+      // Leave existing content as-is
+      self.transform = null;
+      return false;
+    } else if (!this.isIE && this.ver >= 5 || (this.isIE && this.isMac && this.ver >= 5)) { // version 5+ browser (not IE), or IE:mac 5+
+      self.transform = self.pngMethod;
+    } else {
+      // Presumably no PNG support. GIF used instead.
+      self.transform = null;
+      return false;
+    }
+    return true;
+  }
+
+  this.init = function() {
+    this.supported = this.supportTest();
+  }
+
+}
+
+function getElementsByClassName(className,oParent) {
+  var doc = (oParent||document);
+  var matches = [];
+  var nodes = doc.all||doc.getElementsByTagName('*');
+  for (var i=0; i<nodes.length; i++) {
+    if (nodes[i].className == className || nodes[i].className.indexOf(className)+1 || nodes[i].className.indexOf(className+' ')+1 || nodes[i].className.indexOf(' '+className)+1) {
+      matches[matches.length] = nodes[i];
+    }
+  }
+  return matches; // kids, don't play with fire. ;)
+}
+
+// Instantiate and initialize PNG Handler
+
+var pngHandler = new PNGHandler();
+
+pngHandler.init();
+
 
 addEventHandler(window,'load',snowStormInit,false);

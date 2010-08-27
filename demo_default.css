@@ -8,7 +8,7 @@
 */
 
 body {
- background:#333333 url(demo_background.gif);
+ background:#333 url(demo_background.gif);
  color:#eeeeee;
  font-family:verdana;
  font-size:0.7em;
@@ -39,7 +39,8 @@ h2 {
 
 h3 {
  font-size:1.0em;
- margin-top:0px;
+ margin-top:1em;
+ margin-bottom:0px;
  color:#999999;
 }
 
@@ -51,9 +52,14 @@ p.first {
  margin-top:0.25em;
 }
 
+.noTop {
+ margin-top:0px !important;
+ padding-top:0px !important;
+}
+
 pre {
  font-size:1em;
- color:#66ee66;
+ color:#cccc99;
 }
 
 div>pre {
@@ -69,4 +75,47 @@ ul {
 
 .bright {
  color:#ff6666;
+}
+
+dl {
+ margin-left:1em;
+}
+
+dl dt {
+ font-weight:bold;
+ border-bottom:1px dashed #666;
+ padding-bottom:2px;
+ margin-top:1.5em;
+ margin-right:2%;
+}
+
+dl dd {
+ margin-left:0px;
+ margin-bottom:0.5em;
+}
+
+dl dt code {
+ color:#99ccff;
+ font-weight:bold;
+}
+
+dl dd code {
+ color:#ccc;
+}
+
+dl em {
+ color:#fff;
+ font-weight:normal;
+ padding-top:2px;
+ padding-bottom:0.5em;
+}
+
+code {
+ font-size:1.1em;
+}
+
+#container {
+ background-color:#333;
+ padding:16px;
+ border:1px solid #666;
 }
