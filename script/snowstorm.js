@@ -1,6 +1,6 @@
 // DHTML PNG Snowstorm! OO-style Jascript-based Snowstorm
 // --------------------------------------------------------
-// Version 1.2.20031213a
+// Version 1.2.20031218a
 // Dependencies: png.js, addeventhandler.js
 // Code by Scott Schiller - www.schillmania.com
 // --------------------------------------------------------
@@ -74,11 +74,14 @@ function SnowStorm() {
   var flakeHeight = 5;
   var flakeBottom = null; // Integer for fixed bottom, 0 or null for "full-screen" snow effect
   var snowCollect = true;
+  var showStatus = true;
 
   // --- End of user section ---
 
   var isIE = (navigator.appName.toLowerCase().indexOf('internet explorer')+1);
   var isWin9X = (navigator.appVersion.toLowerCase().indexOf('windows 98')+1);
+  var isOpera = (navigator.userAgent.toLowerCase().indexOf('opera ')+1 || navigator.userAgent.toLowerCase().indexOf('opera/')+1);
+  if (isOpera) isIE = false; // Opera (which is sneaky, pretending to be IE by default)
   var screenX = null;
   var screenY = null;
   var scrollY = null;
@@ -269,7 +272,7 @@ function SnowStorm() {
     }
     if (snowCollect && !waiting) { // !active && !waiting
       // create another batch of snow
-      this.createSnow(flakesMaxActive*2,true);
+      this.createSnow(flakesMaxActive,true);
     }
     if (active<flakesMaxActive) {
       with (this.flakes[parseInt(rnd(this.flakes.length))]) {
@@ -283,10 +286,12 @@ function SnowStorm() {
   }
 
   this.createSnow = function(limit,allowInactive) {
+    if (showStatus) window.status = 'Creating snow...';
     for (var i=0; i<limit; i++) {
       this.flakes[this.flakes.length] = new this.SnowFlake(this,parseInt(rnd(flakeTypes)));
       if (allowInactive || i>flakesMaxActive) this.flakes[this.flakes.length-1].active = -1;
     }
+    if (showStatus) window.status = '';
   }
 
   this.timerInit = function() {
@@ -298,7 +303,7 @@ function SnowStorm() {
       this.terrain[i] = 0;
     }
     this.randomizeWind();
-    this.createSnow(snowCollect?flakesMax:flakesMaxActive*2); // create initial batch
+    this.createSnow(snowCollect?flakesMaxActive:flakesMaxActive*2); // create initial batch
     addEventHandler(window,'resize',this.resizeHandler,false);
     addEventHandler(window,'scroll',this.scrollHandler,false);
     // addEventHandler(window,'scroll',this.resume,false); // scroll does not cause window focus. (odd)

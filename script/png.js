@@ -1,6 +1,6 @@
 // PNGHandler: Object-Oriented Javascript-based PNG wrapper
 // --------------------------------------------------------
-// Version 1.1.20031206
+// Version 1.1.20031218
 // Code by Scott Schiller - www.schillmania.com
 // --------------------------------------------------------
 // Description:
@@ -17,6 +17,9 @@ function PNGHandler() {
   this.isWin = this.nv.indexOf('windows')+1?1:0;
   this.ver = this.isIE?parseFloat(this.nv.split('msie ')[1]):parseFloat(this.nv);
   this.isMac = this.nv.indexOf('mac')+1?1:0;
+  this.isOpera = (navigator.userAgent.toLowerCase().indexOf('opera ')+1 || navigator.userAgent.toLowerCase().indexOf('opera/')+1);
+  if (this.isOpera) this.isIE = false; // Opera filter catch (which is sneaky, pretending to be IE by default)
+
   this.transform = null;
 
   this.filterMethod = function(oOld) {
@@ -51,7 +54,6 @@ function PNGHandler() {
 
   this.pngMethod = function(o) {
     // Native transparency support. Easy to implement. (woo!)
-
     var b, i1, newSrc; // background-related variables
     if (o.nodeName == 'DIV' && !(this.isIE && this.isMac)) { // ie:mac PNG support broken for DIVs with PNG backgrounds
       if (document.defaultView) {
@@ -66,7 +68,7 @@ function PNGHandler() {
     } else if (o.nodeName == 'IMG') {
       o.src = o.src.replace('.gif','.png');
     } else if (!this.isMac) {
-      // window.status = 'PNGImage.applyPNG(): node is not a DIV or IMG.';
+      // window.status = 'PNGHandler.applyPNG(): Node is not a DIV or IMG.';
     }
   }
   
@@ -75,19 +77,17 @@ function PNGHandler() {
     // IE 5.5+/win32: filter
 
     if (this.isIE && this.isWin && this.ver >= 5.5) {
-      // Support for PNG - milelage may vary
-      // window.status = 'IE 5.5+ filter method.';
+      // IE proprietary filter method (via DXFilter)
       self.transform = self.filterMethod;
     } else if (!this.isIE && this.ver < 5) {
+      alert('no support');
       self.transform = null;
       // No PNG support or broken support
-      // Leave existing content as-is.
-      // window.status = 'No support or broken support. Using GIF.';
+      // Leave existing content as-is
     } else if (!this.isIE && this.ver >= 5 || (this.isIE && this.isMac && this.ver >= 5)) { // version 5+ browser (not IE), or IE:mac 5+
-      // window.status = 'Using native PNG method.';
       self.transform = self.pngMethod;
     } else {
-      // window.status = 'Broser test failed - Assumed no support or broken support. Using GIF.';
+      // Presumably no PNG support. GIF used instead.
       self.transform = null;
       return false;
     }

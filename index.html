@@ -10,11 +10,21 @@
 <meta name="author" content="Scott Schiller" />
 <meta name="copyright" content="Copyright (C) 1997-2003 Scott Schiller" />
 <meta name="language" content="en-us" />
+<link type="text/css" rel="stylesheet" href="demo_default.css" />
+
+<!-- Copy the SnowStorm script block below into your own page(s) for the snow effect. That is all! (No CSS etc. is needed) -->
+
+<!-- SnowStorm script block  -->
 <script type="text/javascript" src="script/addeventhandler.js"></script>
 <script type="text/javascript" src="script/png.js"></script>
 <script type="text/javascript" src="script/snowstorm.js"></script>
+<!-- /SnowStorm script block -->
+
+<!-- Counter + e-mail stuff specific to this demo page. You don't need this, gentle reader! ;) -->
 <script type="text/javascript" src="http://www.reinvigorate.net/archive/app.bin/jsinclude.php?6024"></script>
-<link type="text/css" rel="stylesheet" href="demo_default.css" />
+<script type="text/javascript">function ihatespamInit() {var a = 'snowstorm';a+='@'+'schillmania'+'.com';document.getElementById('mail').innerHTML = a;}addEventHandler(window,'load',ihatespamInit,false);function ihatespam(o) {window.location.href='mailto:'+o.innerHTML;}</script>
+<!-- /Counter + e-mail stuff -->
+
 </head>
 
 <body>
@@ -22,15 +32,22 @@
 <div style="background-color:#333333;padding:16px;border:1px solid #666666">
 
  <h1>DHTML Snowstorm!</h1>
- <div>Version 1.2.20031213a - <span class="bright">Updated 12.13.2003</span></div>
- <div style="color:#666666">Code by Scott Schiller | schillmania.com</div>
+
+ <div>Version 1.2.20031218a - <span class="bright">Updated 12.18.2003</span></div>
+ <div style="color:#8899aa">Code by Scott Schiller | <a href="http://www.schillmania.com">schillmania.com</a></div>
 
  <p>
   <a href="javascript:snowStorm.randomizeWind()">Change Wind</a><br />
   <a href="javascript:snowStorm.stop()">Stop Snowing</a><br />
  </p>
 
- <br />
+ <h2>Latest Changes</h2>
+
+ <ul>
+  <li>Opera 7 ("O7") support added.. I think.</li>
+  <li>Improved initialization speed (less snowflake objects on startup)</li>
+  <li>Err.. That's about it.</li>
+ </ul>
 
  <h2>Executive Summary</h2>
  
@@ -59,6 +76,7 @@
  <p class="first">You can view these files under the <a href="script/">script</a> directory.</p>
 
  <h2>File Structure</h2>
+
  <p class="first">The script looks for images according to the path detailed below.</p>
 <pre>
 ./
@@ -134,66 +152,58 @@
 </pre>
 
  <h2>Download</h2>
+
  <p class="first">ZIP file, includes this demo page and source code.</p>
 
- <p>
-  <h3>Newest version</h3>
-  <ul>
-   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">SnowStorm v1.2.20031213a</a></li>
-  </ul>
- </p>
+ <ul>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031218a.zip">SnowStorm v1.2.20031218a</a></li>
+ </ul>
 
- <p>
-  <h3>Older versions</h3>
-  <ul>
-   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">SnowStorm v1.1.20031206c</a></li>
-  </ul>
- </p>
+ <h3>Older versions</h3>
+
+ <ul>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">SnowStorm v1.2.20031213a</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">SnowStorm v1.1.20031206c</a></li>
+ </ul>
 
  <h2>Version History</h2>
- <p class="first">
-  <h3>1.2.20031213a</h3>
-  <ul>
-   <li>Netscape 6.x "sticky" snow behavior fixed (now works)</li>
-   <li>IE:mac bug event handler bug fixed (script should now work)</li>
-   <li>Snow collection feature added</li>
-   <li>Snowflake speed is relative to size (Cheap pseudo-3D effect)</li>
-  </ul>
- </p>
- <p>
-  <h3>1.1.20031206c</b></h3>
-  <ul>
-   <li>Initial release</li>
-  </ul>
- </p>
+
+ <h3>1.2.20031218a</h3>
+
+ <ul>
+  <li>Opera 7 ("O7") support added.. I think.</li>
+  <li>Improved initialization speed (less snowflake objects on startup)</li>
+  <li>Err.. That's about it.</li>
+ </ul>
+
+ <h3>1.2.20031213a</h3>
+
+ <ul>
+  <li>Netscape 6.x "sticky" snow behavior fixed (now works)</li>
+  <li>IE:mac bug event handler bug fixed (script should now work)</li>
+  <li>Snow collection feature added</li>
+  <li>Snowflake speed is relative to size (Cheap pseudo-3D effect)</li>
+ </ul>
+
+ <h3>1.1.20031206c</h3>
+
+ <ul>
+  <li>Initial release</li>
+ </ul>
 
  <h2>Feedback</h2>
  <p class="first">
   Comments, suggestions, questions, criticism?<br />
-  <a href="mailto:spamluvr@ihatespam.dyndns.org">spamluvr@ihatespam.dyndns.org</a><br />
-  <div style="color:#666666">(Note: Yes, this address <i>is</i> valid.)</div>
+  <a id="mail" href="#" onclick="ihatespam(this);return false">e-mail</a><br />
+  <!--div style="color:#666666">(Note: Yes, this address <i>is</i> valid.)</div-->
  </p>
 
  <h2>Web</h2>
-  <p class="first">
-   <a href="http://www.schillmania.com"><img src="schill.gif" alt="schillmania.com" style="border:none" /></a><br />
-   schillmania.com
-  </p>
+ <p class="first">
+  <a href="http://www.schillmania.com"><img src="schill.gif" alt="schillmania.com" style="border:none" /></a><br />
+  schillmania.com
+ </p>
 
-</div>
-
-<div style="position:absolute;left:0px;top:0px;visibility:hidden">
-<img src="http://u1.extreme-dm.com/i.gif" height=38
-border=0 width=41 alt=""><script language="javascript1.2"><!--
-EXs=screen;EXw=EXs.width;navigator.appName!="Netscape"?
-EXb=EXs.colorDepth:EXb=EXs.pixelDepth;//-->
-</script><script language="javascript"><!--
-EXd=document;EXw?"":EXw="na";EXb?"":EXb="na";
-EXd.write("<img src=\"http://t0.extreme-dm.com",
-"/0.gif?tag=scotttmp&j=y&srw="+EXw+"&srb="+EXb+"&",
-"l="+(escape(EXd.referrer)||escape(EXw.location))+"\" height=1 width=1>");//-->
-</script><noscript><img height=1 width=1 alt=""
-src="http://t0.extreme-dm.com/0.gif?tag=scotttmp&j=n"></noscript>
 </div>
 
 </body>

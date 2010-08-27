@@ -1,3 +1,12 @@
+/*
+
+ SnowStorm demo page CSS
+ -----------------------
+
+ None of this is needed for the snow effect to work - it's strictly to make the demo/documentation look pretty.
+
+*/
+
 body {
  background:#333333 url(demo_background.gif);
  color:#eeeeee;
