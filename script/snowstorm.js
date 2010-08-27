@@ -1,7 +1,7 @@
 /*
    DHTML PNG Snowstorm! OO-style Jascript-based Snow effect
    --------------------------------------------------------
-   Version 1.3.20081208 (Previous rev: v1.2.20041121a)
+   Version 1.3.20081215 (Previous rev: v1.2.20041121a)
    Dependencies: GIF/PNG images (0 through 4.gif/png)
    Code by Scott Schiller - http://schillmania.com
    --------------------------------------------------------
@@ -119,8 +119,10 @@ function SnowStorm() {
   var isOldIE = (isIE && (isIE6 || navigator.userAgent.match(/msie 5/i)));
   var isWin9X = navigator.appVersion.match(/windows 98/i);
   var isiPhone = navigator.userAgent.match(/iphone/i);
+  var isBackCompatIE = (isIE && document.compatMode == 'BackCompat');
   var isOpera = navigator.userAgent.match(/opera/i);
   if (isOpera) isIE = false; // Opera (which may be sneaky, pretending to be IE by default)
+  var noFixed = (isBackCompatIE || isIE6 || isiPhone);
   var screenX = null;
   var screenX2 = null;
   var screenY = null;
@@ -222,10 +224,6 @@ function SnowStorm() {
     }
   }
 
-  this.setControlActive = function(bActive) {
-    // Y.D[(bActive?'addClass':'removeClass')](s.oControl,'active');
-  }
-
   this.stop = function() {
     this.freeze();
     for (var i=this.flakes.length; i--;) {
@@ -273,13 +271,13 @@ function SnowStorm() {
     }
 
     this.stick = function() {
-      if (isIE6 || isiPhone || (targetElement != document.documentElement && targetElement != document.body)) {
-	    s.o.style.top = (screenY+scrollY-flakeHeight-storm.terrain[Math.floor(s.x)])+'px';
-	  } else {
+      if (noFixed || (targetElement != document.documentElement && targetElement != document.body)) {
+	s.o.style.top = (screenY+scrollY-flakeHeight-storm.terrain[Math.floor(s.x)])+'px';
+      } else {
         s.o.style.display = 'none';
-	    s.o.style.top = 'auto';
+	s.o.style.top = 'auto';
         s.o.style.bottom = '0px';
-		s.o.style.position = 'fixed';
+	s.o.style.position = 'fixed';
         s.o.style.display = 'block';
       }
     }
@@ -296,14 +294,15 @@ function SnowStorm() {
     }
 
     this.move = function() {
-      s.x += s.vX*windOffset;
+      var vX = s.vX*windOffset;
+      s.x += vX;
       s.y += (s.vY*s.vAmp);
-      s.refresh();
-      if (s.vX && screenX-s.x<flakeWidth+(s.vX*windOffset)) { // X-axis scroll check
+      if (vX >= 0 && (s.x >= screenX || screenX-s.x < (flakeWidth+1))) { // X-axis scroll check
         s.x = 0;
-      } else if ((s.vX<0 || windOffset<0)&& s.x-flakeLeftOffset<0-flakeWidth) {
-        s.x = screenX-flakeWidth; // flakeWidth;
+      } else if (vX < 0 && s.x-flakeLeftOffset<0-flakeWidth) {
+        s.x = screenX-flakeWidth-1; // flakeWidth;
       }
+      s.refresh();
       var yDiff = screenY+scrollY-s.y-storm.terrain[Math.floor(s.x)];
       if (yDiff<flakeHeight) {
         s.active = 0;
@@ -315,13 +314,14 @@ function SnowStorm() {
         }
         s.o.style.left = (s.x/screenX*100)+'%'; // set "relative" left (change with resize)
         if (!flakeBottom) {
-	      if (snowStick) {
+	  if (snowStick) {
             s.stick();
-		  } else {
-			s.recycle();
-		  }
+	  } else {
+	    s.recycle();
+	  }
         }
       }
+
     }
 
     this.animate = function() {
@@ -336,7 +336,7 @@ function SnowStorm() {
     }
 
     this.recycle = function() {
-	  s.o.style.display = 'none';
+      s.o.style.display = 'none';
       s.o.style.position = 'absolute';
       s.o.style.bottom = 'auto';
       s.setVelocities();
@@ -345,7 +345,7 @@ function SnowStorm() {
       s.y = parseInt(rnd(screenY)*-1)-flakeHeight;
       s.o.style.left = s.x+'px';
       s.o.style.top = s.y+'px';
-	  s.o.style.display = 'block';
+      s.o.style.display = 'block';
       s.active = 1;
     }
 
