@@ -1,0 +1,42 @@
+body {
+ background:#333333 url(demo_background.gif);
+ color:#eeeeee;
+ font-family:verdana;
+ font-size:0.7em;
+}
+
+a {
+ color:#aaaa00;
+ text-decoration:none;
+}
+
+a:hover {
+ color:#ffff33;
+}
+
+h1, h2 {
+ margin:0px;
+}
+
+h1 {
+ font-size:1.6em;
+}
+
+h2 {
+ font-size:1.2em;
+ margin-top:10px;
+ color:#99ccff;
+}
+
+p {
+ margin:1em 0px 0px 0px;
+}
+
+pre {
+ font-size:1em;
+ color:#ccddee;
+}
+
+div>pre {
+ font-size:1.2em;
+}

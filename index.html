@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>SCHILLMANIA! | DHTML Snowstorm Demo: Javascript snow effect using PNG with GIF fallback</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+<meta name="description" content="On display: DHTML Snowstorm Demo: A Javascript snow effect using PNG with GIF fallback. The creative and technical work of Scott Schiller, also known as 'Schill'. This site focuses primarily on experimental DHTML-based design. Features include: DHTML Arkanoid, DHTML Scorched Earth, DHTML Panoramic Image Viewer, BoxLib, Christmas Light Smashfest, Ed The Rubber Chicken and a whole bunch of other experimentations with code." />
+<meta name="keywords" content="DHTML Snowstorm, DHTML snow, javascript snow, snow effect, Scott Schiller, Schill, Schillmania" />
+<meta name="robots" content="all" />
+<meta name="author" content="Scott Schiller" />
+<meta name="copyright" content="Copyright (C) 1997-2003 Scott Schiller" />
+<meta name="language" content="en-us" />
+<script type="text/javascript" src="script/addeventhandler.js"></script>
+<script type="text/javascript" src="script/png.js"></script>
+<script type="text/javascript" src="script/snowstorm.js"></script>
+<link type="text/css" rel="stylesheet" href="demo_default.css" />
+</head>
+
+<body>
+
+<div style="background-color:#333333;padding:16px;border:1px solid #666666">
+
+ <h1>DHTML Snowstorm!</h1>
+ <div>Version 1.1.20031206c</div>
+ <div style="color:#666666">Code by Scott Schiller | schillmania.com</div>
+
+ <p>
+  <a href="javascript:snowStorm.randomizeWind()">Change Wind</a><br />
+  <a href="javascript:snowStorm.stop()">Stop Snowing</a><br />
+ </p>
+
+ <br />
+
+ <h2>Executive Summary</h2>
+ 
+ <p>SnowStorm is a Javascript-driven snow effect that can be easily implemented into web pages.</p>
+
+ <p>It has been designed as a component-based collection of code which can be reused in other projects where suitable. (Or in other words, this was how it was before I ripped it out of my site and broke it up into more manageable bits!)</p>
+
+ <p>Thanks to the PNG format and a "wrapper" class written to support it, the benefits of alpha transparency can be seen on most browsers with this implementation. IE requires the use of a proprietary DXFilter to properly display PNG images with alpha transparency, but this is handled "automagically" by the PNG wrapper class.</p>
+
+ <h2>Technical Notes</h2>
+
+ <p>Works under most of the current major browsers (IE 5.x+, Netscape 6+). Testing has been limited to those browsers on PC/Mac. If you are seeing snow as you read this, then the script is working as expected.</p>
+
+ <p>The snow script relies on a PNG handler class (defined in png.js) to add PNG functionality where applicable. Support for PNG can be removed easily enough also, if desired. Slower machines on IE:win32 may notice slightly improved performance when using GIF over PNG, but this has not been thoroughly tested.</p>
+
+ <h2>Implementation</h2>
+
+ <p>Three Javascript includes are required. Aside from customization and images, that's it.</p>
+
+<pre>
+&lt;script type="text/javascript" src="script/addeventhandler.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="script/png.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="script/snowstorm.js"&gt;&lt;/script&gt;
+</pre>
+
+ <h2>File Structure</h2>
+
+<pre>
+/
++ image/
+  + snow/
+    0.png
+    1.png
+    2.png
+    3.png
+    4.png
+    5.png
+    0.gif
+    1.gif
+    2.gif
+    3.gif
+    4.gif
+    5.gif
+    none.gif
++ script/
+    addeventhandler.js
+    png.js
+    snowstorm.js
+</pre>
+
+ <p>The script expects to find snow images under ./image/snow/</p>
+
+ <h2>Configurable Properties</h2>
+
+ <p>SnowStorm can be fairly easily customized; some of the major properties are listed below.</p>
+
+ <pre>
+ usePNG
+ ---------------
+ Enables PNG images if supported ("false" disables all PNG usage)
+ 
+ flakeTypes
+ ---------------
+ Sets the range of flake images to use (eg. a value of 5 will use
+ images ranging from 0.png to 4.png.)
+ 
+ flakesMax
+ ---------------
+ Sets the maximum number of snowflakes that can exist on the screen
+ at any given time.
+  
+ flakesMaxActive
+ ---------------
+ Sets the limit of "falling" snowflakes (ie. moving, thus they are
+ considered to be "active".)
+ 
+ vMax
+ ---------------
+ Defines the maximum X and Y velocities for the storm.
+ A range up to this value is selected at random.
+ 
+ flakeWidth
+ ---------------
+ The width (in pixels) of each snowflake image.
+ 
+ flakeHeight
+ ---------------
+ Height (pixels) of each snowflake image.
+ 
+ flakeBottom
+ ---------------
+ Limits the "bottom" coordinate of the snow (if unspecified, snow
+ "sticks" to bottom of browser window while scrolling/resizing etc.)
+</pre>
+
+ <h2>Download</h2>
+ <p><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">SnowStorm v1.1.20031206c</a> (Script + demo/example page)</a></p>
+
+ <h2>Feedback</h2>
+ <p>
+  Comments, suggestions, questions, criticism?<br />
+  <a href="mailto:spamluvr@ihatespam.dyndns.org">spamluvr@ihatespam.dyndns.org</a><br />
+  <div style="color:#666666">(Note: Yes, this address <i>is</i> valid.)</div>
+ </p>
+
+ <h2>Web</h2>
+  <p>
+   <a href="http://www.schillmania.com"><img src="schill.gif" alt="schillmania.com" style="border:none" /></a><br />
+   schillmania.com
+  </p>
+
+</div>
+
+<div style="position:absolute;left:0px;top:0px;visibility:hidden">
+<img src="http://u1.extreme-dm.com/i.gif" height=38
+border=0 width=41 alt=""><script language="javascript1.2"><!--
+EXs=screen;EXw=EXs.width;navigator.appName!="Netscape"?
+EXb=EXs.colorDepth:EXb=EXs.pixelDepth;//-->
+</script><script language="javascript"><!--
+EXd=document;EXw?"":EXw="na";EXb?"":EXb="na";
+EXd.write("<img src=\"http://t0.extreme-dm.com",
+"/0.gif?tag=scotttmp&j=y&srw="+EXw+"&srb="+EXb+"&",
+"l="+escape(EXd.referrer)+"\" height=1 width=1>");//-->
+</script><noscript><img height=1 width=1 alt=""
+src="http://t0.extreme-dm.com/0.gif?tag=scotttmp&j=n"></noscript>
+</div>
+
+</body>
+</html>
