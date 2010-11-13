@@ -45,7 +45,6 @@ var snowStorm = (function(window, document) {
   // UA sniffing and backCompat rendering mode checks for fixed position, etc.
   isIE = navigator.userAgent.match(/msie/i),
   isIE6 = navigator.userAgent.match(/msie 6/i),
-  isOldIE = (isIE && (isIE6 || navigator.userAgent.match(/msie 5/i))),
   isWin98 = navigator.appVersion.match(/windows 98/i),
   isMobile = navigator.userAgent.match(/mobile/i),
   isBackCompatIE = (isIE && document.compatMode === 'BackCompat'),
@@ -217,9 +216,14 @@ var snowStorm = (function(window, document) {
     }
     s.events.remove(window,'scroll',s.scrollHandler);
     s.events.remove(window,'resize',s.resizeHandler);
-    if (s.freezeOnBlur && !isOldIE) {
-      s.events.remove(window,'blur',s.freeze);
-      s.events.remove(window,'focus',s.resume);
+    if (s.freezeOnBlur) {
+      if (isIE) {
+        s.events.remove(document,'focusout',s.freeze);
+        s.events.remove(document,'focusin',s.resume);
+      } else {
+        s.events.remove(window,'blur',s.freeze);
+        s.events.remove(window,'focus',s.resume);
+      }
     }
   };
 
@@ -448,9 +452,14 @@ var snowStorm = (function(window, document) {
     s.createSnow(s.flakesMax); // create initial batch
     s.events.add(window,'resize',s.resizeHandler);
     s.events.add(window,'scroll',s.scrollHandler);
-    if (s.freezeOnBlur && !isOldIE) {
-      s.events.add(window,'blur',s.freeze);
-      s.events.add(window,'focus',s.resume);
+    if (s.freezeOnBlur) {
+      if (isIE) {
+        s.events.add(document,'focusout',s.freeze);
+        s.events.add(document,'focusin',s.resume);
+      } else {
+        s.events.add(window,'blur',s.freeze);
+        s.events.add(window,'focus',s.resume);
+      }
     }
     s.resizeHandler();
     s.scrollHandler();
