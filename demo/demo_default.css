@@ -74,12 +74,17 @@ p.first {
 }
 
 pre {
- font-size:1em;
+ font-size:1.2em;
+ *font-size:1em;
  color:#33cc33;
 }
 
-div>pre {
- font-size:1.2em;
+pre span {
+ color: #999;
+}
+
+pre {
+ font-size:1.25em;
 }
 
 ul {
