@@ -3,22 +3,25 @@
 <html>
 <head>
 <title>JavaScript Snow: DHTML Snowstorm</title>
+<meta name="robots" content="noindex" />
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <meta name="description" content="Realistic JavaScript snow effect for your web site. Free for any use. Includes wind, velocity, &quot;sticky&quot; snow and fading effects. Single file, easy to set up and customize." />
 <meta name="keywords" content="DHTML Snowstorm, DHTML snow, javascript snow, snow effect, Scott Schiller, Schill, Schillmania" />
-<meta name="robots" content="all" />
 <meta name="author" content="Scott Schiller" />
-<meta name="copyright" content="Copyright (C) 1997-2003 Scott Schiller" />
+<meta name="copyright" content="Copyright (C) 2003 Scott Schiller" />
 <meta name="language" content="en-us" />
 <link type="text/css" rel="stylesheet" href="demo/demo_default.css" />
 
 <!-- Copy the <script> tag into your own page(s) for the snow effect. That is all! (No CSS etc. is needed) -->
-<script type="text/javascript" src="snowstorm.js"></script>
+<script src="snowstorm.js"></script>
+
+<!-- for the Snowstorm homepage, allow the demo to run on iPhone and mobile devices. -->
+<script>snowStorm.excludeMobile = false;</script>
 
 <!-- bonus christmas light stuff, not required for snowstorm -->
-<script type="text/javascript" src="lights/soundmanager2-nodebug-jsmin.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.6.0/build/yahoo-dom-event/yahoo-dom-event.js&2.6.0/build/animation/animation-min.js"></script>
-<script type="text/javascript" src="lights/christmaslights.js"></script>
+<script src="lights/soundmanager2-nodebug-jsmin.js"></script>
+<script src="http://yui.yahooapis.com/combo?2.6.0/build/yahoo-dom-event/yahoo-dom-event.js&2.6.0/build/animation/animation-min.js"></script>
+<script src="lights/christmaslights.js"></script>
 
 </head>
 
@@ -32,8 +35,8 @@
 
  <div id="content">
 
- <h1>Snowstorm: A Javascript Snow Effect for HTML</h1>
- <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.4.20091115</p>
+ <h1>Snowstorm: A JavaScript Snow Effect for HTML</h1>
+ <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.41.20101113</p>
 
  <p>
   <a href="#" onclick="snowStorm.randomizeWind();return false">Change Wind</a> | <a href="#" onclick="snowStorm.stop();return false">Stop Snowing</a> | Bonus widget: <a href="lights/" onclick="if (document.location.protocol != 'http') this.href=this.href+'index.html'">Smash Christmas Lights</a>
@@ -42,16 +45,16 @@
 
  <h2>Let It Snow.</h2>
 
- <h3>So, you want Javascript snow on your web site, eh?</h3>
+ <h3>So, you want JavaScript snow on your web site, eh?</h3>
  
- <p class="first">Snowstorm is a Javascript-driven snow effect that can be easily added to web pages. It is free for use, and easy to set up. A single Javascript file provides the functionality required. No images are used for the snow effect.</p>
+ <p class="first">Snowstorm is a JavaScript-driven snow effect that can be easily added to web pages. It is free for use, and easy to set up. A single JavaScript file provides the functionality required. No images are used for the snow effect.</p>
 
  <h3>I'd like to use this on my site.</h3>
 
  <p>This is all you need to get started:</p>
 
  <p>
-	<pre>&lt;script type="text/javascript" src="snowstorm.js"&gt;&lt;/script&gt;</pre>
+  <pre>&lt;script src="snowstorm.js"&gt;&lt;/script&gt;</pre>
  </p>
 
  <p>See this <a href="basic-example.html" title="Simple Snowstorm demo">basic example</a> for reference.</p>
@@ -68,8 +71,13 @@
  <p class="first">ZIP file, includes this demo page and source code.</p>
 
  <ul>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv14_20091115.zip">SnowStorm v1.4.20091115</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv141_20101113.zip">Snowstorm v1.41.20101113</a></li>
  </ul>
+
+ <p>Also on Github: <a href="http://github.com/scottschiller/snowstorm/">github.com/scottschiller/snowstorm/</a></p>
+
+ <h2 id="license">License</h2>
+ <p class="first">Snowstorm is provided under a <a href="license.txt" title="Snowstorm BSD license">BSD license</a>.</p>
 
  <h2 id="technotes">Technical Notes</h2>
 
@@ -77,15 +85,23 @@
 
  <h3>CPU Use</h3>
 
- <p class="first">Snowstorm will eat up a lot of CPU, even on modern computers, because of the number of elements being moved around the screen at once. The <a href="basic-example.html" title="Simple Snowstorm demo">basic example</a> does have notably lower CPU use because it doesn't include the christmas lights, and the page layout is much simpler. Consider raising the animation interval, and lowering the amount of snowflakes (active and max) to help reduce CPU use.</p> 
+ <p class="first">Snowstorm will eat up a lot of CPU, even on modern computers, because of the number of elements being moved around the screen at once. The <a href="basic-example.html" title="Simple Snowstorm demo">basic example</a> may have notably lower CPU use as it doesn't include the christmas lights, and the page layout is much simpler. Consider raising the animation interval, and lowering the amount of snowflakes (active and max) to help reduce CPU use.</p>
+
+ <p>By default, mobile phones are excluded from the snow effect to be nice to their CPUs (and batteries), but you can set <code>snowStorm.excludeMobile = false;</code> to enable Snowstorm on devices like the iPhone, iPad and Android cell phones etc. This demo page has the effect enabled for mobile devices.</p>
 
  <h2 id="howto">Implementation</h2>
 
- <p class="first">One Javascript reference is required. Aside from customization, that's it!</p>
+ <p class="first">One JavaScript reference is required. Aside from customization, that's it!</p>
 
 <pre>
-&lt;script type="text/javascript" src="snowstorm.js"&gt;&lt;/script&gt;
+&lt;script src="snowstorm.js"&gt;&lt;/script&gt;
 </pre>
+
+ <p>Once you have snowstorm configured, you can use the optimized, minified version of the code (~40% smaller):</p>
+
+ <p>
+  <pre>&lt;script src="snowstorm-min.js"&gt;&lt;/script&gt;</pre>
+ </p>
 
  <h2 id="customizing">Customizing Snowstorm</h2>
 
@@ -94,14 +110,14 @@
  <p>For example:</p>
 
 <pre>
-&lt;!-- required snowstorm JS, default behaviour --&gt;
-&lt;script type="text/javascript" src="snowstorm.js"&gt;&lt;/script&gt;
+<span>&lt;!-- required snowstorm JS, default behaviour --&gt;</span>
+&lt;script src="snowstorm.js"&gt;&lt;/script&gt;
 
-&lt;!-- now, we'll customize the snowStorm object --&gt;
-&lt;script type="text/javascript"&gt;
-snowStorm.snowColor = '#99ccff'; // blue-ish snow!?
-snowStorm.flakesMaxActive = 96;  // show more snow on screen at once
-snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
+<span>&lt;!-- now, we'll customize the snowStorm object --&gt;</span>
+&lt;script&gt;
+snowStorm.snowColor = '#99ccff'; <span>// blue-ish snow!?</span>
+snowStorm.flakesMaxActive = 96;  <span>// show more snow on screen at once</span>
+snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of view</span>
 &lt;/script&gt;
 </pre>
 
@@ -113,23 +129,23 @@ snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
 
  <dl>
 
-  <dt><code>snowStorm.flakesMax = 128;</code></dt>
-  <dd>Sets the maximum number of snowflakes that can exist on the screen at any given time.</dd>
-
-  <dt><code>snowStorm.flakesMaxActive = 64;</code></dt>
-  <dd>Sets the limit of "falling" snowflakes (ie. moving on the screen, thus considered to be active.)</dd>
-
   <dt><code>snowStorm.animationInterval = 33;</code></dt>
   <dd>Theoretical "miliseconds per frame" measurement. 20 = fast + smooth, but high CPU use. 50 = more conservative, but slower</dd>
 
   <dt><code>snowStorm.flakeBottom = null;</code></dt>
   <dd>Limits the "floor" (pixels) of the snow. If unspecified, snow will "stick" to the bottom of the browser window and persists through browser resize/scrolling.</dd>
 
+  <dt><code>snowStorm.flakesMax = 128;</code></dt>
+  <dd>Sets the maximum number of snowflakes that can exist on the screen at any given time.</dd>
+
+  <dt><code>snowStorm.flakesMaxActive = 64;</code></dt>
+  <dd>Sets the limit of "falling" snowflakes (ie. moving on the screen, thus considered to be active.)</dd>
+
   <dt><code>snowStorm.followMouse = true;</code></dt>
   <dd>Allows snow to move dynamically with the "wind", relative to the mouse's X (left/right) coordinates.</dd>
 
-  <dt><code>snowStorm.targetElement = null;</code></dt>
-  <dd>Element which snow will be appended to (document body if null/undefined) - can be an element ID string, or a DOM node reference</dd>
+  <dt><code>snowStorm.freezeOnBlur = true;</code></dt>
+  <dd>Stops the snow effect when the browser window goes out of focus, eg., user is in another tab. Saves CPU, nicer to user.</dd>
 
   <dt><code>snowStorm.snowColor = '#fff';</code></dt>
   <dd>Don't eat (or use?) yellow snow.</dd>
@@ -140,6 +156,9 @@ snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
   <dt><code>snowStorm.snowStick = true;</code></dt>
   <dd>Allows the snow to "stick" to the bottom of the window. When off, snow will never sit at the bottom.</dd>
 
+  <dt><code>snowStorm.targetElement = null;</code></dt>
+  <dd>Element which snow will be appended to (default: document body) - can be an element ID string eg. 'myDiv', or a DOM node reference.</dd>
+
   <dt><code>snowStorm.useMeltEffect = true;</code></dt>
   <dd>When recycling fallen snow (or rarely, when falling), have it "melt" and fade out if browser supports it</dd>
 
@@ -149,7 +168,7 @@ snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
   <dt><code>snowStorm.usePositionFixed = false;</code></dt>
   <dd>true = snow not affected by window scroll. may increase CPU load, disabled by default - if enabled, used only where supported.</dd>
 
-  <dt><code>snowStorm.vMaxX = 8, snowStorm.vMaxY = 5;</code></dt>
+  <dt><code>snowStorm.vMaxX = 8;<br />snowStorm.vMaxY = 5;</code></dt>
   <dd>Defines maximum X and Y velocities for the storm; a random value in this range is selected for each snowflake.</dd>
 
  </dl>
@@ -181,12 +200,22 @@ snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
 
  <h3 id="oldversions">Older versions</h3>
  <ul>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv13_20081215.zip">SnowStorm v1.3.20081215</a></li>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv13_20081208.zip">SnowStorm v1.3.20081208</a></li>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20041121a.zip">SnowStorm v1.2.20041121a</a></li>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031218a.zip">SnowStorm v1.2.20031218a</a></li>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">SnowStorm v1.2.20031213a</a></li>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">SnowStorm v1.1.20031206c</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv14_20091115.zip">Snowstorm v1.4.20091115</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv13_20081215.zip">Snowstorm v1.3.20081215</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv13_20081208.zip">Snowstorm v1.3.20081208</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20041121a.zip">Snowstorm v1.2.20041121a</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031218a.zip">Snowstorm v1.2.20031218a</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">Snowstorm v1.2.20031213a</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">Snowstorm v1.1.20031206c</a></li>
+ </ul>
+
+ <h3>1.41.20101113</h3>
+ <ul>
+  <li>Added formal BSD license (project was previously "free for any use.")</li>
+  <li>Modernized event add/remove handlers, wait for window.onload() before starting</li>
+  <li>New excludeMobile option, ignore iPhone etc. by default (high CPU use on mobile is evil for both CPU, and batteries.)</li>
+  <li>New freezeOnBlur option, allow control of previously-hardcoded behaviour</li>
+  <li>Code cleanup, now passes updated (more-strict) jslint validation</li>
  </ul>
 
  <h3>1.4.20091115</h3>
@@ -213,7 +242,7 @@ snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
   <li>Position:fixed used for all more modern browsers.</li>
   <li>Improved distribution of initial snow dump, new recycling.</li>
   <li>Focus/blur events (minus IE) for graceful pausing of snow, sparing user's CPU when window not in focus.</li>
-  <li>Bonus smashable christmas lights demo, using <a href="http://schillmania.com/projects/soundmanager2/" title="Javascript Sound api, play mp3s with javascript">SoundManager 2</a> and <a href="http://developer.yahoo.com/yui/" title="Yahoo! User Interface Library">YUI</a> DOM/Event libraries</li>
+  <li>Bonus smashable christmas lights demo, using <a href="http://schillmania.com/projects/soundmanager2/" title="JavaScript Sound api, play mp3s with JavaScript">SoundManager 2</a> and <a href="http://developer.yahoo.com/yui/" title="Yahoo! User Interface Library">YUI</a> DOM/Event libraries</li>
   <li>Cleaner, simplified event code, removal of old PNG wrapper stuff.</li>
  </ul>
 
@@ -251,7 +280,7 @@ snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
 
  <h2 id="elsewhere">Elsewhere On The Internets</h2>
  <p class="first">
-  This is a side project by Scott Schiller. Wacky DHTML/javascript experiments and other nonsense can be found at <a href="http://www.schillmania.com/" title="Scott's personal experimental DHTML site">schillmania.com</a>.
+  This is a side project by Scott Schiller. Wacky DHTML/JavaScript experiments and other nonsense can be found at <a href="http://www.schillmania.com/" title="Scott's personal experimental DHTML site">schillmania.com</a>.
  </p>
 
  </div>
@@ -259,10 +288,12 @@ snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
 </div>
 
 <!-- stats/counter stuff for my web site. You don't need this for the snow effect to work. -->
+<script>if (navigator.userAgent.match(/msie 6/i)) $('special').style.display = 'inline';</script>
 <script type="text/javascript" src="http://include.reinvigorate.net/re_.js"></script>
 <script type="text/javascript">
-re_('vq4zg-s08a9v69iv');
-if (navigator.userAgent.match(/msie 6/i)) $('special').style.display = 'inline';
+try {
+reinvigorate.track("vq4zg-s08a9v69iv");
+} catch(err) {}
 </script>
 
 </body>
