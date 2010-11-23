@@ -74,7 +74,7 @@ var snowStorm = (function(window, document) {
 
   this.events = (function() {
 
-    var old = (window.attachEvent), slice = Array.prototype.slice,
+    var old = (!window.addEventListener && window.attachEvent), slice = Array.prototype.slice,
     evt = {
       add: (old?'attachEvent':'addEventListener'),
       remove: (old?'detachEvent':'removeEventListener')
