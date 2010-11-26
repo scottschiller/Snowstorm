@@ -94,11 +94,12 @@ var snowStorm = (function(window, document) {
     }
 
     function apply(args, sType) {
-      var oFunc = args.shift()[evt[sType]];
+      var element = args.shift(),
+          method = [evt[sType]];
       if (old) {
-        oFunc(args[0], args[1]);
+        element[method](args[0], args[1]);
       } else {
-        oFunc.apply(this, args);
+        element[method].apply(element, args);
       }
     }
 
