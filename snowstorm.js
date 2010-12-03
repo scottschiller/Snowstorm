@@ -500,11 +500,21 @@ var snowStorm = (function(window, document) {
     }
   };
 
+  function doDelayedStart() {
+    window.setTimeout(function() {
+      s.start(true);
+    }, 20);
+    // event cleanup
+    s.events.remove(isIE?document:window,'mousemove',doDelayedStart);
+  }
+
   function doStart() {
-    if ((this.excludeMobile && !isMobile) || !this.excludeMobile) {
-      window.setTimeout(function() {
-        s.start(true);
-      }, 20);
+    if (!s.excludeMobile || !isMobile) {
+      if (s.freezeOnBlur) {
+        s.events.add(isIE?document:window,'mousemove',doDelayedStart);
+      } else {
+        doDelayedStart();
+      }
     }
     // event cleanup
     s.events.remove(window, 'load', doStart);
