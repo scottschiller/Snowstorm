@@ -1,9 +1,7 @@
 // Christmas Light Smashfest
 // Adapted from XLSF 2007 as originally used on http://schillmania.com/?theme=2007&christmas=1
 
-soundManager.url = 'lights/';
-
-function $(sID) {
+function byID(sID) {
   return document.getElementById(sID);
 }
 
@@ -49,10 +47,18 @@ function XLSF(oTarget,urlBase) {
     var screenY = (document.documentElement.clientHeight||document.body.clientHeight||document.body.scrollHeight);
   }
 
-  this.lightClass = (screenX>1280?'small':'pico'); // kind of light to show (32px to 96px square)
+  this.lightClass = (screenX>1440?'tiny':'pico'); // kind of light to show (32px to 96px square)
 
   if (window.location.href.match(/size=/i)) {
     this.lightClass = window.location.href.substr(window.location.href.indexOf('size=')+5);
+  }
+
+  function rnd(n) {
+    return parseInt(Math.random()*n);
+  }
+
+  function plusMinus(n) {
+    return (parseInt(rnd(2),10)===1?n*-1:n);
   }
 
   this.lightXY = this.lightClasses[this.lightClass]; // shortcut to w/h
@@ -82,6 +88,9 @@ function XLSF(oTarget,urlBase) {
   document.documentElement.appendChild(this.cover);
 
   this.initSounds = function() {
+    if (!soundManager.supported()) {
+      return false;
+    }
 	for (var i=0; i<6; i++) {
 	  soundManager.createSound({
 	    id: 'smash'+i,
@@ -171,24 +180,36 @@ function XLSF(oTarget,urlBase) {
     this.boxVX = 0;
     this.boxVY = 0;
     this.o = xlsf.oExplosionBox.cloneNode(true);
-    this.o.style.left = x+'px';
+    this.o.style.left = (x-6)+'px';
     this.o.style.top = y+'px';
     this.fragments = [];
 
     var mX = x;
     var mY = y;
 
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,-5,-5));
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,0,-5));
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,5,-5));
+    var typeMap = {
+     '0': 3,
+     '1': 2,
+     '2': 1,
+     '3': 0
+    }
 
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,-5,0));
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,0,0));
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,5,0));
+    var type = typeMap[nType];
 
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,5,-5));
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,5,0));
-    this.fragments.push(new ExplosionFragment(nType,sClass,mX,mY,5,5));
+    var scale = 7.5
+    var shift = 2;
+
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,-rnd(scale),-rnd(scale)));
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,plusMinus(rnd(shift)),-rnd(scale)));
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,rnd(scale),-rnd(scale)));
+
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,-rnd(scale),plusMinus(rnd(shift))));
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,plusMinus(rnd(shift)),plusMinus(rnd(shift))));
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,rnd(scale),plusMinus(rnd(shift))));
+
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,rnd(scale),-rnd(scale)));
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,rnd(scale),plusMinus(rnd(shift))));
+    this.fragments.push(new ExplosionFragment(type,sClass,mX,mY,rnd(scale),rnd(scale)));
 
     this.init = function() {
       for (var i=self.fragments.length; i--;) {
@@ -317,7 +338,7 @@ function XLSF(oTarget,urlBase) {
     this.smash = function(e) {
       if (self.broken) return false;
       self.broken = true;
-      if (soundManager && soundManager._didInit && !soundManager._disabled) {
+      if (soundManager && soundManager.supported()) {
         soundManager.play(self.soundID,{pan:self.pan});
         // soundManager.sounds[self.soundID].play({pan:self.pan});
         // if (self.bonusSound != null) window.setTimeout(self.smashBonus,1000);
@@ -426,7 +447,7 @@ function XLSF(oTarget,urlBase) {
   var i=0;
   var j=0;
 
-  $('lights').style.display = 'block';
+  byID('lights').style.display = 'block';
 
   // start lights to the right of <h1>
   var offset = 0; // parseInt(document.getElementsByTagName('h1')[0].offsetWidth)+16;
@@ -451,14 +472,14 @@ function smashInit() {
     return false;
   }
   xlsf = new XLSF(document.getElementById('lights'),urlBase?urlBase:null);
-  if ($('loading')) {
-    $('loading').style.display = 'none';	
+  if (byID('loading')) {
+    byID('loading').style.display = 'none';	
   }
   xlsf.initSounds();
 }
 
+soundManager.url = 'lights/';
 soundManager.flashVersion = 9;
-soundManager.debugMode = false;
 
 soundManager.onload = function() {
   setTimeout(smashInit,20);
