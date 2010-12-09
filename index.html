@@ -15,16 +15,33 @@
 <script src="snowstorm.js"></script>
 
 <!-- for the Snowstorm homepage, allow the demo to run on iPhone and mobile devices. -->
-<script>snowStorm.excludeMobile = false;</script>
+<script>
+snowStorm.excludeMobile = false;
+if (window.location.toString().match(/alpha/i) && !navigator.userAgent.match(/msie/i)) {
+  /* if showing the fancy CSS3-based homepage FX stuff, slide snow behind things. */
+  snowStorm.targetElement = 'bg';
+}
+if (window.location.toString().match(/nowebfont/i)) {
+  snowStorm.useWebFont = false;
+}
+</script>
 
 <!-- bonus christmas light stuff, not required for snowstorm -->
+
 <script src="lights/soundmanager2-nodebug-jsmin.js"></script>
 <script src="http://yui.yahooapis.com/combo?2.6.0/build/yahoo-dom-event/yahoo-dom-event.js&2.6.0/build/animation/animation-min.js"></script>
 <script src="lights/christmaslights.js"></script>
 
+<!-- in this case, we'll lazy-load that stuff. -->
+<!--
+<script src="lights/light-loader.js"></script>
+-->
+
 </head>
 
 <body>
+	
+<div id="bg"></div>
 
 <div id="lights">
  <!-- lights go here -->
@@ -35,9 +52,11 @@
  <div id="content">
 
  <h1>Snowstorm: A JavaScript Snow Effect for HTML</h1>
- <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.41.20101113</p>
+ <p class="alt noTop">Bringing snow to the web since 2003. This version: v2.0 <strong style="color:#ff6666">Experimental, unsupported work-in-progress preview</strong> - try Safari or iPhone/iPad for impressive hardware-accelerated(?) performance. Related: <a href="http://www.flickr.com/photos/schill/5235889904/">screencast</a>.</p>
 
+<!--
  <p style="font-family:WWFlakesRegular;font-size:24px">% & ' ( 1 7 p v w y z</p>
+-->
 
  <p>
   <a href="#" onclick="snowStorm.randomizeWind();return false">Change Wind</a> | <a href="#" onclick="snowStorm.stop();return false">Stop Snowing</a> | Bonus widget: <a href="lights/" onclick="if (document.location.protocol != 'http') this.href=this.href+'index.html'">Smash Christmas Lights</a>
@@ -52,13 +71,9 @@
 
  <h3>I'd like to use this on my site.</h3>
 
- <p>This is all you need to get started:</p>
+ <p>This is a preview, and not ready for release.</p>
 
- <p>
-  <pre>&lt;script src="snowstorm.js"&gt;&lt;/script&gt;</pre>
- </p>
-
- <p>See this <a href="basic-example.html" title="Simple Snowstorm demo">basic example</a> for reference.</p>
+ <p>In the meantime, see this <a href="basic-example.html" title="Simple Snowstorm demo">basic example</a> for reference.</p>
 
  <h3>What kind of things can I customize?</h3>
 
@@ -290,7 +305,7 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
 </div>
 
 <!-- stats/counter stuff for my web site. You don't need this for the snow effect to work. -->
-<script>if (navigator.userAgent.match(/msie 6/i)) $('special').style.display = 'inline';</script>
+<script>if (navigator.userAgent.match(/msie 6/i)) document.getElementById('special').style.display = 'inline';</script>
 <script type="text/javascript" src="http://include.reinvigorate.net/re_.js"></script>
 <script type="text/javascript">
 try {
