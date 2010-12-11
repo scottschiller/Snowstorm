@@ -56,7 +56,11 @@ var snowStorm = (function(window, document) {
 
   this.scaleOffset = 50; // (experimental) vertical offset before scaling begins to take effect.
 
-// this.useWebFont = this.use2DRotate = this.use3DRotate = false;
+/*
+ this.useWebFont = this.use2DRotate = this.use3DRotate = false;
+ this.useScaling = false;
+ this.useOpacity = false;
+*/
 
 // this.useWebFont = false;
 
@@ -365,17 +369,17 @@ var snowStorm = (function(window, document) {
     screenX2 = parseInt(screenX/2,10);
   };
 
-  this.motionMax = 8; // looks to be about 8ish from iOS.
   this.motionOffsetX = 1;
   this.motionOffsetY = 1;
 
-  this.motionHandler = function(e) {
+  this.motionHandler = function(motionObj) {
 
     // tilt/motion detection, gyroscope on the iDevices
     // this event fires continuously in iOS 4.2 with "null" if no motion? lame?
 
-    var mX = e.accelerationIncludingGravity.x,
-        mY = e.accelerationIncludingGravity.y,
+    var mX = motionObj.x,
+        mY = motionObj.y,
+        max = 1, // todo: refactor
         tmp;
 
     if (orientation === -90 || orientation === 90) {
@@ -395,10 +399,10 @@ var snowStorm = (function(window, document) {
         mX *= -1;
       }
       if (mX < 0) {
-        mX = Math.max(-s.motionMax, mX)/s.motionMax; // normalize, scale
+        mX = Math.max(-max, mX)/max; // normalize, scale
         windOffset = Math.max(-windOffsetMax, windOffset+(windMultiplier*mX));
       } else if (mX > 0) {
-        mX = Math.min(s.motionMax, mX)/s.motionMax;
+        mX = Math.min(max, mX)/max;
         windOffset = Math.min(windOffsetMax, windOffset+(windMultiplier*mX));
       }
     } else {
@@ -414,12 +418,12 @@ var snowStorm = (function(window, document) {
         mY *= -1;
       }
       if (mY < 0) { // phone tilting upward - move snow up.
-        mY = Math.max(-s.motionMax, mY)/s.motionMax;
+        mY = Math.max(-max, mY)/max;
         if (vAmpMotionOffset < 1) {
           vAmpMotionOffset -= mY;
         }
       } else if (mY > 0) { // phone tilting downward.
-        mY = Math.min(s.motionMax, mY)/s.motionMax;
+        mY = Math.min(max, mY)/max;
         if (vAmpMotionOffset > -1) {
           vAmpMotionOffset -= mY; // -= mY;
         }
@@ -428,8 +432,29 @@ var snowStorm = (function(window, document) {
 
   };
 
-  this.orientationHandler = function(e) { // iOS ish..
-    orientation = window.orientation;
+  this.tiltHandler = {
+
+    iOS: function(e) {
+      s.motionHandler({
+        x: e.accelerationIncludingGravity.x/8,
+        y: e.accelerationIncludingGravity.y/8
+      });
+    },
+
+    moz: function(oData) {
+      s.motionHandler({
+        x: oData.x*-1,
+        y: oData.y
+      });
+    }
+
+  };
+
+  this.orientationHandler = {
+    iOS: function(e) {
+      orientation = window.orientation;
+    },
+    moz: {}
   };
 
   this.freeze = function() {
@@ -896,8 +921,9 @@ var snowStorm = (function(window, document) {
 
     s.randomizeWind();
     s.createSnow(2); // create initial batch
-    s.events.add(window,'devicemotion',s.motionHandler); // iOS 4.2+, apparently based on w3 spec for motion
-    s.events.add(document.body,'orientationchange',s.orientationHandler);
+    s.events.add(window,'devicemotion',s.tiltHandler.iOS); // iOS 4.2+, apparently based on w3 spec for motion
+    s.events.add(window,'MozOrientation',s.tiltHandler.moz); // Firefox 3.6+
+    s.events.add(document.body,'orientationchange',s.orientationHandler.iOS);
     s.events.add(window,'resize',s.resizeHandler);
     s.events.add(window,'scroll',s.scrollHandler);
     if (s.freezeOnBlur) {
