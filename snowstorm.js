@@ -104,11 +104,12 @@ var snowStorm = (function(window, document) {
   transforms = {
     ie:  (typeof testDiv.style['-ms-transform'] !== 'undefined' ? '-ms-transform' : null),
     moz: (typeof testDiv.style.MozTransform !== 'undefined' ? 'MozTransform' : null),
+    opera: (typeof testDiv.style['OTransform'] !== 'undefined' ? 'OTransform' : null),
     webkit: (typeof testDiv.style.webkitTransform !== 'undefined' ? 'webkitTransform' : null),
     prop: null
   },
   docFrag = document.createDocumentFragment();
-  transforms.prop = (transforms.moz || transforms.webkit || transforms.ie);
+  transforms.prop = (transforms.moz || transforms.webkit || transforms.ie || transforms.opera);
 
   this.timing = {
     frameCount: 0,
