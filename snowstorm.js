@@ -1068,7 +1068,11 @@ var snowStorm = (function(window, document) {
 
     s.timing.ping();
 
- //   document.getElementById('active').innerHTML = active +' of '+s.flakes.length+' (max active: '+storm.flakesMaxActive+'), used: '+used+', waiting: '+waiting+', load: '+parseInt(storm.timing.report()/storm.timing.slowInterval*100)+'%, slow: '+(s.timing.wasSlow?'true':'false');
+    var estimatedFPS = Math.floor(s.timing.frameCount/(s.timing.lastTimestamp-s.timing.timestamp)*1000);
+    if (!isNaN(estimatedFPS) && estimatedFPS !== Infinity) {
+      document.getElementById('active').innerHTML = active +' of '+s.flakes.length+' (max active: '+s.flakesMaxActive+'), used: '+used+', waiting: '+waiting+', load: '+parseInt(storm.timing.report()/storm.timing.slowInterval*100,10)+'%, FPS: ~'+estimatedFPS+', slow: '+(s.timing.wasSlow?'true':'false');
+    }
+
  
   };
 
@@ -1169,7 +1173,7 @@ var snowStorm = (function(window, document) {
 
     if (s.useWebFont) {
 
-      if (checkFontFace()) {
+      if (!ua.match(/blackberry/i) && checkFontFace()) {
 
         addWebFont();
 
