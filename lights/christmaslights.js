@@ -21,11 +21,29 @@ function XLSF(oTarget,urlBase) {
   writeDebug('XLSF()');
   var IS_MOON_COMPUTER = false;
   var isIE = navigator.userAgent.match(/msie/i);
+  var isTouchDevice = navigator.userAgent.match(/ipad|ipod|iphone/i);
   var self = this;
   var xlsf = self;
+  var useAngle = window.location.href.match(/angle/i);
+  var useFollow = window.location.toString().match(/follow/i);
+  var classBase = 'xlsf-light'+(useAngle?' xlsf-angled':'');
   var animDuration = 1;
+  var lastMouseX = 0;
+  var lastMouseY = 0;
+  var mmhTimer = null;
+  var activeLights = [];
+  var testDiv = document.createElement('div');
+  var transforms = {
+    ie:  (typeof testDiv.style['-ms-transform'] !== 'undefined' ? '-ms-transform' : null),
+    moz: (typeof testDiv.style.MozTransform !== 'undefined' ? 'MozTransform' : null),
+    opera: (typeof testDiv.style['OTransform'] !== 'undefined' ? 'OTransform' : null),
+    webkit: (typeof testDiv.style.webkitTransform !== 'undefined' ? 'webkitTransform' : null),
+    prop: null
+  }
+  transforms.prop = (transforms.moz || transforms.webkit || transforms.ie || transforms.opera);
   this.oFrag = document.createDocumentFragment();
   this.oTarget = (oTarget?oTarget:document.documentElement);
+  this.oExplosionTarget = this.oTarget;
   this.oExplosionBox = document.createElement('div');
   this.oExplosionBox.className = 'xlsf-fragment-box';
   this.oExplosionFrag = document.createElement('div');
@@ -51,6 +69,9 @@ function XLSF(oTarget,urlBase) {
 
   if (window.location.href.match(/size=/i)) {
     this.lightClass = window.location.href.substr(window.location.href.indexOf('size=')+5);
+    if (this.lightClass.indexOf('#') !== -1) {
+      this.lightClass = this.lightClass.substr(0,this.lightClass.indexOf('#'));
+    }
   }
 
   function rnd(n) {
@@ -106,7 +127,7 @@ function XLSF(oTarget,urlBase) {
   this.appendLights = function() {
 	writeDebug('xlsf.appendLights()');
     self.oTarget.appendChild(self.oFrag);
-    self.oFrag = document.createDocumentFragment();
+    // self.oFrag = document.createDocumentFragment();
   }
 
   function ExplosionFragment(nType,sClass,x,y,vX,vY) {
@@ -145,8 +166,9 @@ function XLSF(oTarget,urlBase) {
     }
 
     this.burst = function() {
-      self.oA = new Y.A(self.o,{marginLeft:{to:(self.vX*8)},marginTop:{to:(self.vY*8)}},animDuration,Y.UE.easeOutStrong);
+      self.oA = new Y.A(self.o,{marginLeft:{to:(self.vX*(5+Math.random()*10))},marginTop:{to:(self.vY*(5+Math.random()*10))}},animDuration*0.75+(0.5*Math.random()),Y.UE.easeOutStrong);
       self.oA.onTween.subscribe(self.burstTween);
+      // self.oA.onComplete.subscribe(self.hide);
       self.oA.animate();
     }
 
@@ -187,14 +209,7 @@ function XLSF(oTarget,urlBase) {
     var mX = x;
     var mY = y;
 
-    var typeMap = {
-     '0': 3,
-     '1': 2,
-     '2': 1,
-     '3': 0
-    }
-
-    var type = typeMap[nType];
+    var type = typeMap[nType+sClass];
 
     var scale = 7.5
     var shift = 2;
@@ -217,10 +232,10 @@ function XLSF(oTarget,urlBase) {
       }
       if (!IS_MOON_COMPUTER) {
         // faster rendering, particles get cropped
-        xlsf.oFrag.appendChild(self.o);
+        xlsf.oExplosionTarget.appendChild(self.o);
       } else {
         // slower rendering, can overlay body
-        xlsf.oFrag.appendChild(self.o);
+        xlsf.oExplosionTarget.appendChild(self.o);
       }
     }
 
@@ -265,7 +280,7 @@ function XLSF(oTarget,urlBase) {
 
   }
 
-  function Light(sSizeClass,sClass,nType,x,y) {
+  function Light(sSizeClass,sClass,nType,x,y,row,col) {
     var self = this;
     this.o = document.createElement('div');
     this.sClass = sClass;
@@ -278,9 +293,12 @@ function XLSF(oTarget,urlBase) {
     this.h = xlsf.lightClasses[sSizeClass];
     this.x = x;
     this.y = y;
+    this.row = row;
+    this.col = col;
     this.bg = urlBase+'image/bulbs-'+this.w+'x'+this.h+'-'+this.sClass+'.png';
     this.o.style.width = this.w+'px';
     this.o.style.height = this.h+'px';
+    self.o.style[transforms.prop] = 'rotate('+Math.random()*plusMinus(10)+'deg)';
     this.o.style.background = 'url('+this.bg+') no-repeat 0px 0px';
     this.bgBaseX = (self.useY?-self.w*this.nType:0);
     this.bgBaseY = (!self.useY?-self.h*this.nType:0);
@@ -351,8 +369,16 @@ function XLSF(oTarget,urlBase) {
         self.setBGPos(self.w*-rndFrame,0);
       }
       xlsf.lightSmashCounter++;
+      for (var i=activeLights.length; i--;) {
+        // find this in the active array, and take it out
+        if (activeLights[i] === self) {
+          activeLights.splice(i,1);
+          break;
+        }
+      }
+      // xlsf.doNukeCheck();
+      // window.setTimeout(self.reset,3000); // respawn
     }
-
     this.smashBonus = function() {
       // soundManager.play(self.bonusSounds[self.bonusSound],urlBase+'sound/'+self.bonusSounds[self.bonusSound]+'.mp3');
     }
@@ -366,7 +392,7 @@ function XLSF(oTarget,urlBase) {
     }
 
     this.init = function() {
-      self.o.className = 'xlsf-light '+this.sizeClass+' '+this.sClass;
+      self.o.className = classBase+' '+this.sizeClass+' '+this.sClass;
       self.o.style.left = self.x+'px';
       self.o.style.top = self.y+'px';
       self.o.style.width = self.w+'px';
@@ -382,8 +408,9 @@ function XLSF(oTarget,urlBase) {
     
   } // Light()
 
-  this.createLight = function(sClass,nType,x,y) {
-    var oLight = new Light(self.lightClass,sClass,nType,x,y);
+  this.createLight = function(sClass,nType,x,y,row,col) {
+    var oLight = new Light(self.lightClass,sClass,nType,x,y,row,col);
+    activeLights.push(oLight);
     self.lightGroups[sClass].push(oLight);
     self.lights.push(oLight);
     return oLight;
@@ -404,20 +431,33 @@ function XLSF(oTarget,urlBase) {
 
   
   this.destroyLights = function() {
-    self.startSequence(self.destroyLight,20);    
+    // reset counter
+    self.lightSmashCounter = 0;
+    self.startSequence(Math.random()>0.75?self.destroyLight:self.destroyRandom,33);
+  }
+
+  this.destroyRandom = function() {
+    for (var i=2; i--;) {
+      if (activeLights.length) {
+        activeLights[parseInt(Math.random()*activeLights.length)].smash();
+      }
+    }
   }
 
   this.destroyLight = function() {
     var groupSize = 2; // # to smash at a time
     if (self.lightSmashCounter<self.lights.length) {
       var limit = Math.min(self.lightSmashCounter+groupSize,self.lights.length);
+      var reverseLimit = Math.max(0, self.lights.length-self.lightSmashCounter-groupSize);
       for (var i=self.lightSmashCounter; i<limit; i++) {
-        self.lights[self.lightSmashCounter].smash();
+        if (self.lights[self.lightSmashCounter]) {
+          self.lights[self.lightSmashCounter].smash();
+        }
+        self.lights[self.lights.length-self.lightSmashCounter].smash();
       }
     } else {
       self.stopSequence();
     }
-
   }
 
   this.uberSmash = function() {
@@ -444,6 +484,31 @@ function XLSF(oTarget,urlBase) {
     }
   }
 
+  var typeMaps = {
+    'tiny': {
+      '0bottom': 0,
+      '0top': 3,
+      '1bottom': 1,
+      '1top': 2,
+      '2bottom': 2,
+      '2top': 1,
+      '3bottom': 3,
+      '3top': 0
+    },
+    'other': {
+      '0bottom': 3,
+      '0top': 3,
+      '1bottom': 2,
+      '1top': 2,
+      '2bottom': 1,
+      '2top': 1,
+      '3bottom': 0,
+      '3top': 0
+    }
+  }
+
+  var typeMap = typeMaps[(this.lightClass === 'tiny' ? 'tiny' : 'other')];
+
   var i=0;
   var j=0;
 
@@ -460,8 +525,83 @@ function XLSF(oTarget,urlBase) {
   }
 
   this.appendLights();
-  this.startSequence(self.randomLights);
-  
+
+  function followMouseMove(e) {
+    if (!self.lights.length) {
+      return false;
+    }
+    var x = lastMouseX;
+    var y = lastMouseY;
+    var x2 = null;
+    var y2 = null;
+    var angle = 0;
+    var light = null;
+    for (var i=self.lights.length; i--;) {
+      light = self.lights[i];
+      if (light && !light.broken) {
+        x2 = light.x;
+        y2 = light.y;
+        angle = Math.atan2((y-y2),(x-x2))*(180/Math.PI);
+        // angle += (45*180/Math.PI)
+        if (light.col%2 === 0) { 
+          angle += (270*180/Math.PI);
+        }
+        if (transforms.prop) {
+          light.o.style[transforms.prop] = 'rotate('+angle+'deg)';
+        }
+      }
+    }
+    mmhTimer = null;
+  }
+
+  function mouseOrTouchMove(e) {
+    // coordinate -> row/col check, smashy smash
+    var x, y, lightIndex;
+    if (e.targetTouches) {
+      if (e.targetTouches.length === 1) {
+        x = e.targetTouches[0].clientX;
+        y = e.targetTouches[0].clientY;
+      }
+    } else {
+      x = e.clientX;
+      y = e.clientY;
+    }
+    lightCol = Math.floor((x/(screenX-16))*jMax),
+    lightRow = Math.floor((y/(screenY-16))*(iMax+0.5))
+    lightIndex = (jMax*lightRow)+lightCol;
+    if (self.lights[lightIndex]) {
+      self.lights[lightIndex].smash();
+    }
+    if (useFollow) {
+      lastMouseX = parseInt(e.clientX);
+      lastMouseY = parseInt(e.clientY);
+      if (!mmhTimer) {
+        mmhTimer = window.setTimeout(followMouseMove, 33); // try to be nice and throttle this call, which may be expensive
+      }
+      // followMouseMove(e);
+    }
+  }
+
+  if (isTouchDevice && self.oTarget !== document.documentElement) { 
+    self.oTarget.addEventListener('touchstart', function(e) {
+      self.oTarget.addEventListener('touchmove', mouseOrTouchMove, false);
+      self.oTarget.addEventListener('touchend', function(e) {
+        self.oTarget.removeEventListener('touchMove', mouseOrTouchMove);
+      });
+      mouseOrTouchMove(e); // initial touch might be a smashy one, too
+      e.preventDefault();
+      return false;
+    }, false);
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener('mousemove', mouseOrTouchMove, false);
+    } else if (document.attachEvent) {
+      document.attachEvent('onmousemove', mouseOrTouchMove);
+    }
+  }
+
+  this.startSequence(self.randomLights); 
+ 
 }
 
 var xlsf = null;
@@ -480,11 +620,10 @@ function smashInit() {
 
 soundManager.url = 'lights/';
 soundManager.flashVersion = 9;
+soundManager.useHighPerformance = true;
+soundManager.wmode = 'transparent';
+soundManager.debugMode = false;
 
-soundManager.onload = function() {
+soundManager.onready(function() {
   setTimeout(smashInit,20);
-}
-
-soundManager.onerror = function() {
-  setTimeout(smashInit,20);
-}
+});
