@@ -1,7 +1,7 @@
 /** @license
  * DHTML Snowstorm! JavaScript-based Snow for web pages
  * --------------------------------------------------------
- * Version 1.41.20101113 (Previous rev: 1.4.20091115)
+ * Version 1.42.20111120 (Previous rev: 1.41.20101113)
  * Copyright (c) 2007, Scott Schiller. All rights reserved.
  * Code provided under the BSD License:
  * http://schillmania.com/projects/snowstorm/license.txt
@@ -130,10 +130,11 @@ var snowStorm = (function(window, document) {
   }
 
   this.randomizeWind = function() {
+    var i;
     vRndX = plusMinus(rnd(s.vMaxX,0.2));
     vRndY = rnd(s.vMaxY,0.2);
     if (this.flakes) {
-      for (var i=0; i<this.flakes.length; i++) {
+      for (i=0; i<this.flakes.length; i++) {
         if (this.flakes[i].active) {
           this.flakes[i].setVelocities();
         }
@@ -142,13 +143,14 @@ var snowStorm = (function(window, document) {
   };
 
   this.scrollHandler = function() {
+    var i;
     // "attach" snowflakes to bottom of window if no absolute bottom value was given
     scrollY = (s.flakeBottom?0:parseInt(window.scrollY||document.documentElement.scrollTop||document.body.scrollTop,10));
     if (isNaN(scrollY)) {
       scrollY = 0; // Netscape 6 scroll fix
     }
     if (!fixedForEverything && !s.flakeBottom && s.flakes) {
-      for (var i=s.flakes.length; i--;) {
+      for (i=s.flakes.length; i--;) {
         if (s.flakes[i].active === 0) {
           s.flakes[i].stick();
         }
@@ -158,7 +160,7 @@ var snowStorm = (function(window, document) {
 
   this.resizeHandler = function() {
     if (window.innerWidth || window.innerHeight) {
-      screenX = window.innerWidth-(!isIE?16:2)-s.flakeRightOffset;
+      screenX = window.innerWidth-(!isIE?16:16)-s.flakeRightOffset;
       screenY = (s.flakeBottom?s.flakeBottom:window.innerHeight);
     } else {
       screenX = (document.documentElement.clientWidth||document.body.clientWidth||document.body.scrollWidth)-(!isIE?8:0)-s.flakeRightOffset;
@@ -175,12 +177,13 @@ var snowStorm = (function(window, document) {
 
   this.freeze = function() {
     // pause animation
+    var i;
     if (!s.disabled) {
       s.disabled = 1;
     } else {
       return false;
     }
-    for (var i=s.timers.length; i--;) {
+    for (i=s.timers.length; i--;) {
       clearInterval(s.timers[i]);
     }
   };
@@ -211,8 +214,9 @@ var snowStorm = (function(window, document) {
   };
 
   this.stop = function() {
+    var i;
     this.freeze();
-    for (var i=this.flakes.length; i--;) {
+    for (i=this.flakes.length; i--;) {
       this.flakes[i].o.style.display = 'none';
     }
     s.events.remove(window,'scroll',s.scrollHandler);
@@ -229,7 +233,8 @@ var snowStorm = (function(window, document) {
   };
 
   this.show = function() {
-    for (var i=this.flakes.length; i--;) {
+    var i;
+    for (i=this.flakes.length; i--;) {
       this.flakes[i].o.style.display = 'block';
     }
   };
@@ -302,7 +307,7 @@ var snowStorm = (function(window, document) {
       s.y += (s.vY*s.vAmp);
       if (s.x >= screenX || screenX-s.x < storm.flakeWidth) { // X-axis scroll check
         s.x = 0;
-      } else if (vX < 0 && s.x-storm.flakeLeftOffset < 0-storm.flakeWidth) {
+      } else if (vX < 0 && s.x-storm.flakeLeftOffset < -storm.flakeWidth) {
         s.x = screenX-storm.flakeWidth-1; // flakeWidth;
       }
       s.refresh();
@@ -432,7 +437,8 @@ var snowStorm = (function(window, document) {
   };
 
   this.createSnow = function(limit,allowInactive) {
-    for (var i=0; i<limit; i++) {
+    var i;
+    for (i=0; i<limit; i++) {
       s.flakes[s.flakes.length] = new s.SnowFlake(s,parseInt(rnd(flakeTypes),10));
       if (allowInactive || i>s.flakesMaxActive) {
         s.flakes[s.flakes.length-1].active = -1;
@@ -446,7 +452,8 @@ var snowStorm = (function(window, document) {
   };
 
   this.init = function() {
-    for (var i=0; i<s.meltFrameCount; i++) {
+    var i;
+    for (i=0; i<s.meltFrameCount; i++) {
       s.meltFrames.push(1-(i/s.meltFrameCount));
     }
     s.randomizeWind();
