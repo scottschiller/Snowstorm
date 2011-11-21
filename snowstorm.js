@@ -344,7 +344,7 @@ var snowStorm = (function(window, document) {
 
   this.getSnowCharacter = function() {
 
-    var charset = (s.useWebFont ? (s.use2DRotate ? (features.transforms.webkit && !navigator.userAgent.match(/chrome/i) ? s.webFontCharacters : s.webFontCharactersSubset) : s.webFontCharactersSubset) : null);
+    var charset = (s.useWebFont ? (s.use2DRotate ? (features.transforms.webkit || features.transforms.moz ? s.webFontCharacters : s.webFontCharactersSubset) : s.webFontCharactersSubset) : null);
     return (!charset ? s.snowCharacter : charset[parseInt(Math.random()*charset.length,10)]);
 
   };
@@ -1069,7 +1069,7 @@ var snowStorm = (function(window, document) {
     s.timing.ping();
 
     var estimatedFPS = Math.floor(s.timing.frameCount/(s.timing.lastTimestamp-s.timing.timestamp)*1000);
-    if (!isNaN(estimatedFPS) && estimatedFPS !== Infinity) {
+    if (!isNaN(estimatedFPS) && estimatedFPS !== Infinity && document.getElementById('active')) {
       document.getElementById('active').innerHTML = active +' of '+s.flakes.length+' (max active: '+s.flakesMaxActive+'), used: '+used+', waiting: '+waiting+', load: '+parseInt(storm.timing.report()/storm.timing.slowInterval*100,10)+'%, FPS: ~'+estimatedFPS+', slow: '+(s.timing.wasSlow?'true':'false');
     }
 
