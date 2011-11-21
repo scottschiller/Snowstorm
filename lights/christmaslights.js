@@ -517,8 +517,8 @@ function XLSF(oTarget,urlBase) {
   // start lights to the right of <h1>
   var offset = 0; // parseInt(document.getElementsByTagName('h1')[0].offsetWidth)+16;
 
-  var jMax = Math.floor((screenX-offset-16)/self.lightXY);
-  var iMax = Math.floor((screenY-offset-16)/self.lightXY);
+  var jMax = Math.floor((screenX-offset)/self.lightXY);
+  var iMax = Math.floor((screenY-offset-12)/self.lightXY);
 
   for (j=0; j<jMax; j++) {
     this.createLight('top',parseInt(j/3)%4,offset+j*self.lightXY,0);
@@ -542,7 +542,6 @@ function XLSF(oTarget,urlBase) {
         x2 = light.x;
         y2 = light.y;
         angle = Math.atan2((y-y2),(x-x2))*(180/Math.PI);
-        // angle += (45*180/Math.PI)
         if (light.col%2 === 0) { 
           angle += (270*180/Math.PI);
         }
@@ -566,19 +565,18 @@ function XLSF(oTarget,urlBase) {
       x = e.clientX;
       y = e.clientY;
     }
-    lightCol = Math.floor((x/(screenX-16))*jMax),
-    lightRow = Math.floor((y/(screenY-16))*(iMax+0.5))
+    lightCol = Math.floor((x/(self.lightClasses[self.lightClass]*jMax)*jMax)),
+    lightRow = Math.floor((y/(self.lightClasses[self.lightClass]*iMax)*iMax))
     lightIndex = (jMax*lightRow)+lightCol;
     if (self.lights[lightIndex]) {
       self.lights[lightIndex].smash();
     }
     if (useFollow) {
-      lastMouseX = parseInt(e.clientX);
-      lastMouseY = parseInt(e.clientY);
+      lastMouseX = x;
+      lastMouseY = y;
       if (!mmhTimer) {
         mmhTimer = window.setTimeout(followMouseMove, 33); // try to be nice and throttle this call, which may be expensive
       }
-      // followMouseMove(e);
     }
   }
 
