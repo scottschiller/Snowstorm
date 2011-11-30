@@ -46,7 +46,7 @@ var snowStorm = (function(window, document) {
   isIE = navigator.userAgent.match(/msie/i),
   isIE6 = navigator.userAgent.match(/msie 6/i),
   isWin98 = navigator.appVersion.match(/windows 98/i),
-  isMobile = navigator.userAgent.match(/mobile/i),
+  isMobile = navigator.userAgent.match(/mobile|opera m(ob|in)/i),
   isBackCompatIE = (isIE && document.compatMode === 'BackCompat'),
   noFixed = (isMobile || isBackCompatIE || isIE6),
   screenX = null, screenX2 = null, screenY = null, scrollY = null, vRndX = null, vRndY = null,
