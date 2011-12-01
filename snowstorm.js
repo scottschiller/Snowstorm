@@ -1,7 +1,7 @@
 /** @license
  * DHTML Snowstorm! JavaScript-based Snow for web pages
  * --------------------------------------------------------
- * Version 1.42.20111120 (Previous rev: 1.41.20101113)
+ * Version 1.43.20111201 (Previous rev: 1.42.20111120)
  * Copyright (c) 2007, Scott Schiller. All rights reserved.
  * Code provided under the BSD License:
  * http://schillmania.com/projects/snowstorm/license.txt
@@ -14,6 +14,7 @@ var snowStorm = (function(window, document) {
 
   // --- common properties ---
 
+  this.autoStart = true;          // Whether the snow should start automatically or not.
   this.flakesMax = 128;           // Limit total amount of snow made (falling + sticking)
   this.flakesMaxActive = 64;      // Limit amount of snow falling at once (less = lower CPU use)
   this.animationInterval = 33;    // Theoretical "miliseconds per frame" measurement. 20 = fast + smooth, but high CPU use. 50 = more conservative, but slower
@@ -160,7 +161,7 @@ var snowStorm = (function(window, document) {
 
   this.resizeHandler = function() {
     if (window.innerWidth || window.innerHeight) {
-      screenX = window.innerWidth-(!isIE?16:16)-s.flakeRightOffset;
+      screenX = window.innerWidth-16-s.flakeRightOffset;
       screenY = (s.flakeBottom?s.flakeBottom:window.innerHeight);
     } else {
       screenX = (document.documentElement.clientWidth||document.body.clientWidth||document.body.scrollWidth)-(!isIE?8:0)-s.flakeRightOffset;
@@ -529,7 +530,9 @@ var snowStorm = (function(window, document) {
   }
 
   // hooks for starting the snow
-  s.events.add(window, 'load', doStart, false);
+  if (s.autoStart) {
+    s.events.add(window, 'load', doStart, false);
+  }
 
   return this;
 
