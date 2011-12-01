@@ -262,6 +262,7 @@ var snowStorm = (function(window, document) {
     this.o.style.width = storm.flakeWidth+'px';
     this.o.style.height = storm.flakeHeight+'px';
     this.o.style.fontFamily = 'arial,verdana';
+    this.o.style.cursor = 'default';
     this.o.style.overflow = 'hidden';
     this.o.style.fontWeight = 'normal';
     this.o.style.zIndex = storm.zIndex;
