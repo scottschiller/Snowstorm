@@ -364,10 +364,10 @@ var snowStorm = (function(window, document) {
         s.recycle();
       } else {
         if (s.meltFrame < s.meltFrameCount) {
-          s.meltFrame++;
           s.setOpacity(s.o,s.meltFrames[s.meltFrame]);
           s.o.style.fontSize = s.fontSize-(s.fontSize*(s.meltFrame/s.meltFrameCount))+'px';
           s.o.style.lineHeight = storm.flakeHeight+2+(storm.flakeHeight*0.75*(s.meltFrame/s.meltFrameCount))+'px';
+          s.meltFrame++;
         } else {
           s.recycle();
         }
