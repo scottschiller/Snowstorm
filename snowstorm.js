@@ -22,7 +22,7 @@ var snowStorm = (function(window, document) {
   this.flakeBottom = null;        // Integer for Y axis snow limit, 0 or null for "full-screen" snow effect
   this.followMouse = true;        // Snow movement can respond to the user's mouse
   this.snowColor = '#fff';        // Don't eat (or use?) yellow snow.
-  this.snowCharacter = '&bull;';  // &bull; = bullet, &middot; is square on some systems etc.
+  this.snowCharacters = ['&bull;','*'];  // &bull; = bullet, &middot; is square on some systems etc.
   this.snowStick = true;          // Whether or not snow should "stick" at the bottom. When off, will never collect.
   this.targetElement = null;      // element which snow will be appended to (null = document.body) - can be an element ID eg. 'myDiv', or a DOM node reference
   this.useMeltEffect = true;      // When recycling fallen snow (or rarely, when falling), have it "melt" and fade out if browser supports it
@@ -128,6 +128,13 @@ var snowStorm = (function(window, document) {
 
   function plusMinus(n) {
     return (parseInt(rnd(2),10)===1?n*-1:n);
+  }
+
+  function randFlake() {
+    if (storm.snowCharacters.length <= 1) {
+      return storm.snowCharacters[0];
+    }
+    return storm.snowCharacters[Math.floor(Math.random()*storm.snowCharacters.length)];
   }
 
   this.randomizeWind = function() {
@@ -257,7 +264,7 @@ var snowStorm = (function(window, document) {
     this.active = 1;
     this.fontSize = (10+(this.type/5)*10);
     this.o = document.createElement('div');
-    this.o.innerHTML = storm.snowCharacter;
+    this.o.innerHTML = randFlake();
     this.o.style.color = storm.snowColor;
     this.o.style.position = (fixedForEverything?'fixed':'absolute');
     this.o.style.width = storm.flakeWidth+'px';
