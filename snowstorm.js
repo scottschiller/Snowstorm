@@ -10,7 +10,7 @@
 /*global window, document, navigator, clearInterval, setInterval */
 /*jslint white: false, onevar: true, plusplus: false, undef: true, nomen: true, eqeqeq: true, bitwise: true, regexp: true, newcap: true, immed: true */
 
-var snowStorm = (function(window, document) {
+function SnowStorm(window, document) {
 
   // --- common properties ---
 
@@ -533,7 +533,6 @@ var snowStorm = (function(window, document) {
   if (s.autoStart) {
     s.events.add(window, 'load', doStart, false);
   }
+}
 
-  return this;
-
-}(window, document));
+var snowStorm = new SnowStorm(window, document);
