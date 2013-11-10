@@ -420,8 +420,11 @@ var snowStorm = (function(window, document) {
             }
           } else {
             s.twinkleFrame--;
-            // s.o.style.visibility = (s.twinkleFrame && s.twinkleFrame % 2 === 0 ? 'hidden' : 'visible');
-            s.o.style.opacity = (s.twinkleFrame && s.twinkleFrame % 2 === 0 ? 0 : 1);
+            if (!opacitySupported) {
+              s.o.style.visibility = (s.twinkleFrame && s.twinkleFrame % 2 === 0 ? 'hidden' : 'visible');
+            } else {
+              s.o.style.opacity = (s.twinkleFrame && s.twinkleFrame % 2 === 0 ? 0 : 1);
+            }
           }
         }
       }
