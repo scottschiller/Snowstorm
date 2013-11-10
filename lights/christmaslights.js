@@ -1,8 +1,6 @@
 // Christmas Light Smashfest
 // Adapted from XLSF 2007 as originally used on http://schillmania.com/?theme=2007&christmas=1
 
-soundManager.url = 'lights/';
-
 function $(sID) {
   return document.getElementById(sID);
 }
@@ -317,7 +315,7 @@ function XLSF(oTarget,urlBase) {
     this.smash = function(e) {
       if (self.broken) return false;
       self.broken = true;
-      if (soundManager && soundManager._didInit && !soundManager._disabled) {
+      if (soundManager && soundManager.ok()) {
         soundManager.play(self.soundID,{pan:self.pan});
         // soundManager.sounds[self.soundID].play({pan:self.pan});
         // if (self.bonusSound != null) window.setTimeout(self.smashBonus,1000);
@@ -383,7 +381,7 @@ function XLSF(oTarget,urlBase) {
 
   
   this.destroyLights = function() {
-    self.startSequence(self.destroyLight,20);    
+    self.startSequence(self.destroyLight,20);
   }
 
   this.destroyLight = function() {
@@ -457,13 +455,14 @@ function smashInit() {
   xlsf.initSounds();
 }
 
-soundManager.flashVersion = 9;
-soundManager.debugMode = false;
-
-soundManager.onload = function() {
-  setTimeout(smashInit,20);
-}
-
-soundManager.onerror = function() {
-  setTimeout(smashInit,20);
-}
+soundManager.setup({
+  flashVersion: 9,
+  preferFlash: false,
+  url: 'lights/',
+  onready: function() {
+    smashInit();
+  },
+  ontimeout: function() {
+    smashInit();
+  }
+});
