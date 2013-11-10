@@ -47,7 +47,7 @@ function XLSF(oTarget,urlBase) {
     var screenY = (document.documentElement.clientHeight||document.body.clientHeight||document.body.scrollHeight);
   }
 
-  this.lightClass = (screenX>1280?'small':'pico'); // kind of light to show (32px to 96px square)
+  this.lightClass = (screenX>1800?'small':'pico'); // kind of light to show (32px to 96px square)
 
   if (window.location.href.match(/size=/i)) {
     this.lightClass = window.location.href.substr(window.location.href.indexOf('size=')+5);
