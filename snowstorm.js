@@ -20,6 +20,7 @@ var snowStorm = (function(window, document) {
   this.flakesMax = 128;           // Limit total amount of snow made (falling + sticking)
   this.flakesMaxActive = 64;      // Limit amount of snow falling at once (less = lower CPU use)
   this.animationInterval = 33;    // Theoretical "miliseconds per frame" measurement. 20 = fast + smooth, but high CPU use. 50 = more conservative, but slower
+  this.useGPU = true;             // Enable transform-based hardware acceleration, reduce CPU load.
   this.flakeBottom = null;        // Integer for Y axis snow limit, 0 or null for "full-screen" snow effect
   this.followMouse = true;        // Snow movement can respond to the user's mouse
   this.snowColor = '#fff';        // Don't eat (or use?) yellow snow.
@@ -342,7 +343,7 @@ var snowStorm = (function(window, document) {
     this.o.innerHTML = storm.snowCharacter;
     this.o.style.color = storm.snowColor;
     this.o.style.position = (fixedForEverything?'fixed':'absolute');
-    if (features.transform.prop) {
+    if (storm.useGPU && features.transform.prop) {
       // GPU-accelerated snow.
       this.o.style[features.transform.prop] = 'translate3d(0px, 0px, 0px)';
     }
