@@ -2,10 +2,10 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>JavaScript Snow: DHTML Snowstorm</title>
+<title>JavaScript Snow: DHTML Snowstorm. Making it snow on the internets since 2003.</title>
 <meta name="robots" content="noindex" />
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
-<meta name="description" content="Realistic JavaScript snow effect for your web site. Free for any use. Includes wind, velocity, &quot;sticky&quot; snow and fading effects. Single file, easy to set up and customize." />
+<meta name="description" content="Realistic JavaScript snow effect for your web site. Free for any use. BSD license. Includes wind, velocity, &quot;sticky&quot; snow and fading effects. Single file, easy to set up and customize." />
 <meta name="keywords" content="DHTML Snowstorm, DHTML snow, javascript snow, snow effect, Scott Schiller, Schill, Schillmania" />
 <meta name="author" content="Scott Schiller" />
 <meta name="copyright" content="Copyright (C) 2003 Scott Schiller" />
@@ -36,7 +36,7 @@
  <div id="content">
 
  <h1>Snowstorm: A JavaScript Snow Effect for HTML</h1>
- <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.43.20111201</p>
+ <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.44.20131111</p>
 
  <p>
   <a href="#" onclick="snowStorm.randomizeWind();return false">Change Wind</a> | <a href="#" onclick="snowStorm.stop();return false">Stop Snowing</a> | Bonus widget: <a href="lights/" onclick="if (document.location.protocol != 'http') this.href=this.href+'index.html'">Smash Christmas Lights</a>
@@ -71,7 +71,7 @@
  <p class="first">ZIP file, includes this demo page and source code.</p>
 
  <ul>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv143_20111201.zip">Snowstorm v1.43.20111201</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv144_20131111.zip">Snowstorm v1.44.20131111</a></li>
  </ul>
 
  <p>Also on Github: <a href="http://github.com/scottschiller/snowstorm/">github.com/scottschiller/snowstorm/</a></p>
@@ -81,13 +81,18 @@
 
  <h2 id="technotes">Technical Notes</h2>
 
- <p class="first">Snowstorm works under most of the old major browsers (IE 5.x+, Netscape 6+) as well as IE 6, 7, 8, Firefox, Safari and Opera, and the iPhone. If you are seeing snow as you read this, then the script is working as expected.</p>
+ <p class="first">Snowstorm works under modern browsers, and as far back as IE 6 - possibly even 5.5, if you can find a copy!</p>
+ <p>If you are seeing snow as you read this, then the script is working as expected.</p>
 
  <h3>CPU Use</h3>
 
- <p class="first">Snowstorm will eat up a lot of CPU, even on modern computers, because of the number of elements being moved around the screen at once. The <a href="basic-example.html" title="Simple Snowstorm demo">basic example</a> may have notably lower CPU use as it doesn't include the christmas lights, and the page layout is much simpler. Consider raising the animation interval, and lowering the amount of snowflakes (active and max) to help reduce CPU use.</p>
+ <p class="first">Snowstorm can eat up a lot of CPU, even on modern computers, because of the number of elements being moved around the screen at once. The <a href="basic-example.html" title="Simple Snowstorm demo">basic example</a> may have notably lower CPU use as it doesn't include the christmas lights, and the page layout is much simpler. Consider raising the animation interval, and lowering the amount of snowflakes (active and max) to help reduce CPU use.</p>
 
- <p>By default, mobile phones are excluded from the snow effect to be nice to their CPUs (and batteries), but you can set <code>snowStorm.excludeMobile = false;</code> to enable Snowstorm on devices like the iPhone, iPad and Android cell phones etc. This demo page has the effect enabled for mobile devices.</p>
+ <p>Where supported, Snowstorm will attempt to use GPU-based hardware acceleration to draw and animate the snow. This can help in reducing CPU load.</p>
+
+ <h3>Mobile Support</h3>
+
+ <p>By default, mobile devices are excluded from the snow effect to be nice to their CPUs (and batteries.) If your local marketing department insists, <i>"This must work on mobile!"</i> despite being warned of the downsides, you can set <code style="white-space:nowrap">snowStorm.excludeMobile = false;</code> (or edit the snowstorm.js file directly) to enable Snowstorm on devices like the iPhone, iPad and Android phones etc. This demo page has the effect enabled for mobile devices.</p>
 
  <h2 id="howto">Implementation</h2>
 
@@ -115,8 +120,8 @@
 
 <span>&lt;!-- now, we'll customize the snowStorm object --&gt;</span>
 &lt;script&gt;
-snowStorm.snowColor = '#99ccff'; <span>// blue-ish snow!?</span>
-snowStorm.flakesMaxActive = 96;  <span>// show more snow on screen at once</span>
+snowStorm.snowColor = '#99ccff'; <span>  // blue-ish snow!?</span>
+snowStorm.flakesMaxActive = 96;  <span>  // show more snow on screen at once</span>
 snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of view</span>
 &lt;/script&gt;
 </pre>
@@ -203,6 +208,7 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
 
  <h3 id="oldversions">Older versions</h3>
  <ul>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv143_20111201.zip">Snowstorm v1.43.20111201</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv142_20111120.zip">Snowstorm v1.42.20111120</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv141_20101113.zip">Snowstorm v1.41.20101113</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv14_20091115.zip">Snowstorm v1.4.20091115</a></li>
@@ -309,7 +315,6 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
 </div>
 
 <!-- stats/counter stuff for my web site. You don't need this for the snow effect to work. -->
-<script>if (navigator.userAgent.match(/msie 6/i)) $('special').style.display = 'inline';</script>
 <script type="text/javascript" src="http://include.reinvigorate.net/re_.js"></script>
 <script type="text/javascript">
 try {

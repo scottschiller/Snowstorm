@@ -50,8 +50,8 @@ var snowStorm = (function(window, document) {
   isIE6 = navigator.userAgent.match(/msie 6/i),
   isMobile = navigator.userAgent.match(/mobile|opera m(ob|in)/i),
   isBackCompatIE = (isIE && document.compatMode === 'BackCompat'),
-  noFixed = (isMobile || isBackCompatIE || isIE6),
-  screenX = null, screenX2 = null, screenY = null, scrollY = null, vRndX = null, vRndY = null,
+  noFixed = (isBackCompatIE || isIE6),
+  screenX = null, screenX2 = null, screenY = null, scrollY = null, docHeight = null, vRndX = null, vRndY = null,
   windOffset = 1,
   windMultiplier = 2,
   flakeTypes = 6,
@@ -142,12 +142,19 @@ var snowStorm = (function(window, document) {
   this.meltFrameCount = 20;
   this.meltFrames = [];
 
-  this.setXY = function(o, x, y) {
+  this.setXY = (noFixed ? function(o, x, y) {
+    // IE 6 and the like
     if (o) {
-      o.style.left = x;
-      o.style.top = y;
+      o.style.left = x + 'px';
+      // avoid creating vertical scrollbars
+      o.style.top = (Math.min(y, docHeight-storm.flakeHeight)) + 'px';
     }
-  };
+  } : function(o, x, y) {
+    if (o) {
+      o.style.right = (100-(x/screenX*100)) + '%';
+      o.style.bottom = (100-(y/screenY*100)) + '%';
+    }
+  });
 
   this.events = (function() {
 
@@ -222,7 +229,7 @@ var snowStorm = (function(window, document) {
   this.scrollHandler = function() {
     var i;
     // "attach" snowflakes to bottom of window if no absolute bottom value was given
-    scrollY = (storm.flakeBottom ? 0 : parseInt(window.scrollY || document.documentElement.scrollTop || document.body.scrollTop, 10));
+    scrollY = (storm.flakeBottom ? 0 : parseInt(window.scrollY || document.documentElement.scrollTop || (noFixed ? document.body.scrollTop : 0), 10));
     if (isNaN(scrollY)) {
       scrollY = 0; // Netscape 6 scroll fix
     }
@@ -243,6 +250,7 @@ var snowStorm = (function(window, document) {
       screenX = (document.documentElement.clientWidth || document.body.clientWidth || document.body.scrollWidth) - (!isIE ? 8 : 0) - storm.flakeRightOffset;
       screenY = storm.flakeBottom || document.documentElement.clientHeight || document.body.clientHeight || document.body.scrollHeight;
     }
+    docHeight = document.body.offsetHeight;
     screenX2 = parseInt(screenX/2,10);
   };
 
@@ -250,6 +258,7 @@ var snowStorm = (function(window, document) {
     screenX = storm.targetElement.offsetLeft + storm.targetElement.offsetWidth - storm.flakeRightOffset;
     screenY = storm.flakeBottom || (storm.targetElement.offsetTop + storm.targetElement.offsetHeight);
     screenX2 = parseInt(screenX/2,10);
+    docHeight = document.body.offsetHeight;
   };
 
   this.freeze = function() {
@@ -351,7 +360,7 @@ var snowStorm = (function(window, document) {
         // safety check
         return false;
       }
-      storm.setXY(s.o, s.x + 'px', s.y + 'px');
+      storm.setXY(s.o, s.x, s.y);
     };
 
     this.stick = function() {
@@ -361,8 +370,7 @@ var snowStorm = (function(window, document) {
         s.o.style.top = storm.flakeBottom+'px';
       } else {
         s.o.style.display = 'none';
-        s.o.style.top = 'auto';
-        s.o.style.bottom = '0px';
+        s.o.style.bottom = '0%';
         s.o.style.position = 'fixed';
         s.o.style.display = 'block';
       }
@@ -389,7 +397,7 @@ var snowStorm = (function(window, document) {
         s.x = screenX-storm.flakeWidth-1; // flakeWidth;
       }
       s.refresh();
-      yDiff = screenY+scrollY-s.y;
+      yDiff = screenY+scrollY-s.y+storm.flakeHeight;
       if (yDiff<storm.flakeHeight) {
         s.active = 0;
         if (storm.snowStick) {
@@ -406,13 +414,14 @@ var snowStorm = (function(window, document) {
           // s.melting = false;
         }
         if (storm.useTwinkleEffect) {
-          if (!s.twinkleFrame) {
-            if (Math.random()>0.9) {
-              s.twinkleFrame = parseInt(Math.random()*20,10);
+          if (s.twinkleFrame < 0) {
+            if (Math.random() > 0.97) {
+              s.twinkleFrame = parseInt(Math.random() * 8, 10);
             }
           } else {
             s.twinkleFrame--;
-            s.o.style.visibility = (s.twinkleFrame && s.twinkleFrame%2===0?'hidden':'visible');
+            // s.o.style.visibility = (s.twinkleFrame && s.twinkleFrame % 2 === 0 ? 'hidden' : 'visible');
+            s.o.style.opacity = (s.twinkleFrame && s.twinkleFrame % 2 === 0 ? 0 : 1);
           }
         }
       }
@@ -595,11 +604,7 @@ var snowStorm = (function(window, document) {
 
   function doStart() {
     if (!storm.excludeMobile || !isMobile) {
-      if (storm.freezeOnBlur) {
-        storm.events.add(isIE?document:window,'mousemove',doDelayedStart);
-      } else {
-        doDelayedStart();
-      }
+      doDelayedStart();
     }
     // event cleanup
     storm.events.remove(window, 'load', doStart);

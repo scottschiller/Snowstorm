@@ -12,8 +12,9 @@ body {
  padding:0px;
  background:#333 url(../lights/image/bg-strip-dark.png);
  color:#eeeeee;
- font-family:"helvetica neue",helvetica,verdana,arial,tahoma,"sans serif";
- font-size:85%;
+ font-family:helvetica,verdana,arial,tahoma,"sans serif";
+ font-weight: 300;
+ font-size:100%;
  text-shadow: 0 0 0 #000; /* safari is lame. */
 }
 
@@ -27,17 +28,20 @@ a:hover {
 }
 
 h1, h2, h3 {
+ font-family:"helvetica neue",helvetica,verdana,arial,tahoma,"sans serif";
  margin:0px;
+ font-weight: 200;
  color:#fff;
- letter-spacing:-0.02em;
 }
 
 h1 {
- font-size:2.2em;
+ font-size:2.5em;
+ font-weight: 100;
 }
 
 h2 {
  font-size:1.8em;
+ font-weight: 100;
  margin-top:1em;
  color:#fff;
 }
@@ -46,10 +50,10 @@ h3 {
  font-size:1.4em;
  margin-top:1em;
  margin-bottom:0.5em;
+ letter-spacing: 0.01em;
  color:#99ccff;
 }
 
-h2 + h3,
 h3 + p {
  margin-top:0px;
 }
@@ -144,7 +148,7 @@ code {
  background-color:#222;
  padding:32px 16px 16px 16px;
  border:1px solid #111;
- max-width:50em;
+ max-width:60em;
  _width:50em;
  margin:0px auto;
 }
@@ -209,6 +213,7 @@ code {
 
 .special {
  display:none;
+ _display: block; /* just you, IE 6. */
  font-size:x-small;
  color:#999;
 }
