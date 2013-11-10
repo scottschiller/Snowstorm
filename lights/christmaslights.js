@@ -113,7 +113,7 @@ function XLSF(oTarget,urlBase) {
     this.vY = vY*(1.5+Math.random());
     this.oA = null;
     this.oA2 = null;
-    this.burstPhase = 3; // starting background offset point
+    this.burstPhase = 1; // starting background offset point
     this.burstPhases = 4; // 1+offset (ignore large size)
     this.o.style.backgroundPosition = ((this.w*-this.burstPhase)+'px '+(this.h*-nType)+'px');
 
