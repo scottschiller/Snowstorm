@@ -2,7 +2,7 @@
  * DHTML Snowstorm! JavaScript-based snow for web pages
  * Making it snow on the internets since 2003. You're welcome.
  * -----------------------------------------------------------
- * Version 1.44.20131111 (Previous rev: 1.43.20111201)
+ * Version 1.44.20131125 (Previous rev: 1.44.20131111)
  * Copyright (c) 2007, Scott Schiller. All rights reserved.
  * Code provided under the BSD License
  * http://schillmania.com/projects/snowstorm/license.txt
@@ -144,17 +144,34 @@ var snowStorm = (function(window, document) {
   this.meltFrames = [];
 
   this.setXY = (noFixed ? function(o, x, y) {
+
     // IE 6 and the like
     if (o) {
-      o.style.left = x + 'px';
+      o.style.right = (100-(x/screenX*100)) + '%';
       // avoid creating vertical scrollbars
       o.style.top = (Math.min(y, docHeight-storm.flakeHeight)) + 'px';
     }
+
   } : function(o, x, y) {
+
     if (o) {
-      o.style.right = (100-(x/screenX*100)) + '%';
-      o.style.bottom = (100-(y/screenY*100)) + '%';
+
+      if (!storm.flakeBottom) {
+
+        // if not using a fixed bottom coordinate...
+        o.style.right = (100-(x/screenX*100)) + '%';
+        o.style.bottom = (100-(y/screenY*100)) + '%';
+
+      } else {
+
+        // absolute top.
+        o.style.right = (100-(x/screenX*100)) + '%';
+        o.style.top = (Math.min(y, docHeight-storm.flakeHeight)) + 'px';
+
+      }
+
     }
+
   });
 
   this.events = (function() {
@@ -331,7 +348,7 @@ var snowStorm = (function(window, document) {
     this.vX = null;
     this.vY = null;
     this.vAmpTypes = [1,1.2,1.4,1.6,1.8]; // "amplification" for vX/vY (based on flake size/type)
-    this.vAmp = this.vAmpTypes[this.type];
+    this.vAmp = this.vAmpTypes[this.type] || 1;
     this.melting = false;
     this.meltFrameCount = storm.meltFrameCount;
     this.meltFrames = storm.meltFrames;
@@ -590,7 +607,7 @@ var snowStorm = (function(window, document) {
       storm.resizeHandler = storm.resizeHandlerAlt; // re-map handler to get element instead of screen dimensions
     }
     storm.resizeHandler(); // get bounding box elements
-    storm.usePositionFixed = (storm.usePositionFixed && !noFixed); // whether or not position:fixed is supported
+    storm.usePositionFixed = (storm.usePositionFixed && !noFixed && !storm.flakeBottom); // whether or not position:fixed is to be used
     fixedForEverything = storm.usePositionFixed;
     if (screenX && screenY && !storm.disabled) {
       storm.init();

@@ -3,7 +3,6 @@
 <html>
 <head>
 <title>JavaScript Snow: DHTML Snowstorm. Making it snow on the internets since 2003.</title>
-<meta name="robots" content="noindex" />
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <meta name="description" content="Realistic JavaScript snow effect for your web site. Free for any use. BSD license. Includes wind, velocity, &quot;sticky&quot; snow and fading effects. Single file, easy to set up and customize." />
 <meta name="keywords" content="DHTML Snowstorm, DHTML snow, javascript snow, snow effect, Scott Schiller, Schill, Schillmania" />
@@ -36,7 +35,7 @@
  <div id="content">
 
  <h1>Snowstorm: A JavaScript Snow Effect for HTML</h1>
- <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.44.20131111</p>
+ <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.44.20131125</p>
 
  <p>
   <a href="#" onclick="snowStorm.randomizeWind();return false">Change Wind</a> | <a href="#" onclick="snowStorm.stop();return false">Stop Snowing</a> | Bonus widget: <a href="lights/" onclick="if (document.location.protocol != 'http') this.href=this.href+'index.html'">Smash Christmas Lights</a>
@@ -71,7 +70,7 @@
  <p class="first">ZIP file, includes this demo page and source code.</p>
 
  <ul>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv144_20131111.zip">Snowstorm v1.44.20131111</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv144_20131125.zip">Snowstorm v1.44.20131125</a></li>
  </ul>
 
  <p>Also on Github: <a href="http://github.com/scottschiller/snowstorm/">github.com/scottschiller/snowstorm/</a></p>
@@ -88,7 +87,7 @@
 
  <p class="first">Snowstorm can eat up a lot of CPU, even on modern computers, because of the number of elements being moved around the screen at once. The <a href="basic-example.html" title="Simple Snowstorm demo">basic example</a> may have notably lower CPU use as it doesn't include the christmas lights, and the page layout is much simpler. Consider raising the animation interval, and lowering the amount of snowflakes (active and max) to help reduce CPU use.</p>
 
- <p>Where supported, Snowstorm will attempt to use GPU-based hardware acceleration to draw and animate the snow. This can help in reducing CPU load.</p>
+ <p>Where supported, Snowstorm will attempt to use GPU-based hardware acceleration to draw and animate the snow. Having GPU acceleration can help in reducing CPU load.</p>
 
  <h3>Mobile Support</h3>
 
@@ -138,7 +137,7 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
   <dd>Whether the snow should start automatically or not.</dd>
 
   <dt><code>snowStorm.animationInterval = 33;</code></dt>
-  <dd>Theoretical "miliseconds per frame" measurement. 20 = fast + smooth, but high CPU use. 50 = more conservative, but slower</dd>
+  <dd>Theoretical "milliseconds per frame" measurement. 20 = fast + smooth, but high CPU use. 50 = more conservative, but slower</dd>
 
   <dt><code>snowStorm.flakeBottom = null;</code></dt>
   <dd>Limits the "floor" (pixels) of the snow. If unspecified, snow will "stick" to the bottom of the browser window and persists through browser resize/scrolling.</dd>
@@ -208,6 +207,7 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
 
  <h3 id="oldversions">Older versions</h3>
  <ul>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv144_20131111.zip">Snowstorm v1.44.20131111</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv143_20111201.zip">Snowstorm v1.43.20111201</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv142_20111120.zip">Snowstorm v1.42.20111120</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv141_20101113.zip">Snowstorm v1.41.20101113</a></li>
@@ -218,6 +218,12 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031218a.zip">Snowstorm v1.2.20031218a</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">Snowstorm v1.2.20031213a</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">Snowstorm v1.1.20031206c</a></li>
+ </ul>
+
+ <h3>1.44.20131125</h3>
+ <ul>
+  <li>Fixed regression where <code>flakeBottom</code> would result in snow not properly sticking.</li>
+  <li>Percent based left/right positioning is now applied in all browsers, making resizing better.</li>
  </ul>
 
  <h3>1.44.20131111</h3>
