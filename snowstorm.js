@@ -30,7 +30,7 @@ var snowStorm = (function(window, document) {
   this.useMeltEffect = true;      // When recycling fallen snow (or rarely, when falling), have it "melt" and fade out if browser supports it
   this.useTwinkleEffect = false;  // Allow snow to randomly "flicker" in and out of view while falling
   this.usePositionFixed = false;  // true = snow does not shift vertically when scrolling. May increase CPU load, disabled by default - if enabled, used only where supported
-  this.usePixelPosition = false;  // Whether to use pixel values for snow top/left vs. percentages. Auto-enabled if body or targetElement has position: relative applied.
+  this.usePixelPosition = false;  // Whether to use pixel values for snow top/left vs. percentages. Auto-enabled if body is position:relative or targetElement is specified.
 
   // --- less-used bits ---
 
@@ -281,8 +281,8 @@ var snowStorm = (function(window, document) {
   };
 
   this.resizeHandlerAlt = function() {
-    screenX = storm.targetElement.offsetLeft + storm.targetElement.offsetWidth - storm.flakeRightOffset;
-    screenY = storm.flakeBottom || (storm.targetElement.offsetTop + storm.targetElement.offsetHeight);
+    screenX = storm.targetElement.offsetWidth - storm.flakeRightOffset;
+    screenY = storm.flakeBottom || storm.targetElement.offsetHeight;
     screenX2 = parseInt(screenX/2,10);
     docHeight = document.body.offsetHeight;
   };
@@ -609,10 +609,13 @@ var snowStorm = (function(window, document) {
       }
     }
     if (!storm.targetElement) {
-      storm.targetElement = (document.documentElement || document.body);
+      storm.targetElement = (document.body || document.documentElement);
     }
     if (storm.targetElement !== document.documentElement && storm.targetElement !== document.body) {
-      storm.resizeHandler = storm.resizeHandlerAlt; // re-map handler to get element instead of screen dimensions
+      // re-map handler to get element instead of screen dimensions
+      storm.resizeHandler = storm.resizeHandlerAlt;
+      //and force-enable pixel positioning
+      storm.usePixelPosition = true;
     }
     storm.resizeHandler(); // get bounding box elements
     storm.usePositionFixed = (storm.usePositionFixed && !noFixed && !storm.flakeBottom); // whether or not position:fixed is to be used
