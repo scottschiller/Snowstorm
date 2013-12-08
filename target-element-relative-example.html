@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>DHTML SnowStorm: targetElement example</title>
+<style type="text/css">
+
+#snow-target {
+ /**
+  * absolute-positioned example, snow is appended to this element.
+  * overflow: hidden is recommended for best effect.
+  */
+ position: relative;
+ background: #445566;
+ overflow: hidden;
+ _zoom: 1; /* IE 6 display fix */
+}
+</style>
+
+<script type="text/javascript" src="snowstorm.js"></script>
+
+<script type="text/javascript">
+
+// blue-ish snow!?
+snowStorm.snowColor = '#99ccff';
+
+// append the snow to this element (by ID or direct DOM node reference)
+snowStorm.targetElement = 'snow-target';
+
+</script>
+</head>
+
+<body style="background:#336699;font:100 1.75em helvetica neue, helvetica,arial,verdana,sans-serif;color:#fff">
+
+<h1 style="font-size:1.5em;margin:0px;font-weight:100">SnowStorm: targetElement example (relative positioning)</h1>
+
+<div id="snow-target">
+
+ <div style="padding:0px 0.5em">
+
+  <p>
+   This example has snow moving in a relatively-positioned &lt;div&gt; element, using <code>snowStorm.targetElement</code>. Applying CSS <code>overflow: hidden</code> to the target element is required for best effect.
+  </p>
+
+  <p>
+   View the source of this page for reference.
+  </p>
+
+ </div>
+
+</div>
+
+</body>
+</html>
