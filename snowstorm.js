@@ -2,7 +2,7 @@
  * DHTML Snowstorm! JavaScript-based snow for web pages
  * Making it snow on the internets since 2003. You're welcome.
  * -----------------------------------------------------------
- * Version 1.44.20131125 (Previous rev: 1.44.20131111)
+ * Version 1.44.20131208 (Previous rev: 1.44.20131125)
  * Copyright (c) 2007, Scott Schiller. All rights reserved.
  * Code provided under the BSD License
  * http://schillmania.com/projects/snowstorm/license.txt
@@ -30,6 +30,7 @@ var snowStorm = (function(window, document) {
   this.useMeltEffect = true;      // When recycling fallen snow (or rarely, when falling), have it "melt" and fade out if browser supports it
   this.useTwinkleEffect = false;  // Allow snow to randomly "flicker" in and out of view while falling
   this.usePositionFixed = false;  // true = snow does not shift vertically when scrolling. May increase CPU load, disabled by default - if enabled, used only where supported
+  this.usePixelPosition = false;  // Whether to use pixel values for snow top/left vs. percentages. Auto-enabled if body or targetElement has position: relative applied.
 
   // --- less-used bits ---
 
@@ -57,6 +58,7 @@ var snowStorm = (function(window, document) {
   windMultiplier = 2,
   flakeTypes = 6,
   fixedForEverything = false,
+  targetElementIsRelative = false,
   opacitySupported = (function(){
     try {
       document.createElement('div').style.opacity = '0.5';
@@ -143,18 +145,24 @@ var snowStorm = (function(window, document) {
   this.meltFrameCount = 20;
   this.meltFrames = [];
 
-  this.setXY = (noFixed ? function(o, x, y) {
+  this.setXY = function(o, x, y) {
 
-    // IE 6 and the like
-    if (o) {
+    if (!o) {
+      return false;
+    }
+
+    if (storm.usePixelPosition || targetElementIsRelative) {
+
+      o.style.left = (x - storm.flakeWidth) + 'px';
+      o.style.top = (y - storm.flakeHeight) + 'px';
+
+    } else if (noFixed) {
+
       o.style.right = (100-(x/screenX*100)) + '%';
       // avoid creating vertical scrollbars
       o.style.top = (Math.min(y, docHeight-storm.flakeHeight)) + 'px';
-    }
 
-  } : function(o, x, y) {
-
-    if (o) {
+    } else {
 
       if (!storm.flakeBottom) {
 
@@ -172,7 +180,7 @@ var snowStorm = (function(window, document) {
 
     }
 
-  });
+  };
 
   this.events = (function() {
 
@@ -601,13 +609,22 @@ var snowStorm = (function(window, document) {
       }
     }
     if (!storm.targetElement) {
-      storm.targetElement = (document.docuentElement || document.body);
+      storm.targetElement = (document.documentElement || document.body);
     }
     if (storm.targetElement !== document.documentElement && storm.targetElement !== document.body) {
       storm.resizeHandler = storm.resizeHandlerAlt; // re-map handler to get element instead of screen dimensions
     }
     storm.resizeHandler(); // get bounding box elements
     storm.usePositionFixed = (storm.usePositionFixed && !noFixed && !storm.flakeBottom); // whether or not position:fixed is to be used
+    if (window.getComputedStyle) {
+      // attempt to determine if body or user-specified snow parent element is relatlively-positioned.
+      try {
+        targetElementIsRelative = (window.getComputedStyle(storm.targetElement, null).getPropertyValue('position') === 'relative');
+      } catch(e) {
+        // oh well
+        targetElementIsRelative = false;
+      }
+    }
     fixedForEverything = storm.usePositionFixed;
     if (screenX && screenY && !storm.disabled) {
       storm.init();
