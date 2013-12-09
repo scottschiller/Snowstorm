@@ -35,7 +35,7 @@
  <div id="content">
 
  <h1>Snowstorm: A JavaScript Snow Effect for HTML</h1>
- <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.44.20131125</p>
+ <p class="alt noTop">Bringing snow to the web since 2003. This version: 1.44.20131208</p>
 
  <p>
   <a href="#" onclick="snowStorm.randomizeWind();return false">Change Wind</a> | <a href="#" onclick="snowStorm.stop();return false">Stop Snowing</a> | Bonus widget: <a href="lights/" onclick="if (document.location.protocol != 'http') this.href=this.href+'index.html'">Smash Christmas Lights</a>
@@ -70,7 +70,7 @@
  <p class="first">ZIP file, includes this demo page and source code.</p>
 
  <ul>
-  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv144_20131125.zip">Snowstorm v1.44.20131125</a></li>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv144_20131208.zip">Snowstorm v1.44.20131208</a></li>
  </ul>
 
  <p>Also on Github: <a href="http://github.com/scottschiller/snowstorm/">github.com/scottschiller/snowstorm/</a></p>
@@ -164,7 +164,7 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
   <dd>Allows the snow to "stick" to the bottom of the window. When off, snow will never sit at the bottom.</dd>
 
   <dt><code>snowStorm.targetElement = null;</code></dt>
-  <dd>Element which snow will be appended to (default: document body) - can be an element ID string eg. 'myDiv', or a DOM node reference.</dd>
+  <dd>An HTML element which snow will be appended to (default: document body.) Can be an element ID string eg. 'myDiv', or a DOM node reference. See <a href="target-element-relative-example.html">relative</a> and <a href="target-element-absolute-example.html">absolute</a>-positioned examples.</dd>
 
   <dt><code>snowStorm.useMeltEffect = true;</code></dt>
   <dd>When recycling fallen snow (or rarely, when falling), have it "melt" and fade out if browser supports it</dd>
@@ -207,6 +207,7 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
 
  <h3 id="oldversions">Older versions</h3>
  <ul>
+  <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv144_20131125.zip">Snowstorm v1.44.20131125</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv144_20131111.zip">Snowstorm v1.44.20131111</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv143_20111201.zip">Snowstorm v1.43.20111201</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstormv142_20111120.zip">Snowstorm v1.42.20111120</a></li>
@@ -219,6 +220,14 @@ snowStorm.useTwinkleEffect = true; <span>// let the snow flicker in and out of v
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031213a.zip">Snowstorm v1.2.20031213a</a></li>
   <li><a href="http://www.schillmania.com/projects/snowstorm/snowstorm_20031206c.zip">Snowstorm v1.1.20031206c</a></li>
  </ul>
+
+ <h3>1.44.20131208</h3>
+ <ul>
+  <li>Added <code>usePixelPosition</code> to allow forcing of pixels for left/top positioning vs. percentage-based values.</li>
+  <li>Detect and force pixel-based positioning if <code>targetElement</code> is specified, or <code>body</code> is relatively-positioned.</li>
+  <li>Adjust positioning logic for <code>targetElement</code> case.</li>
+ </ul>
+
 
  <h3>1.44.20131125</h3>
  <ul>
