@@ -2,7 +2,7 @@
  * DHTML Snowstorm! JavaScript-based snow for web pages
  * Making it snow on the internets since 2003. You're welcome.
  * -----------------------------------------------------------
- * Version 1.44.20131208 (Previous rev: 1.44.20131125)
+ * Version 1.44.20131215 (Previous rev: 1.44.20131208)
  * Copyright (c) 2007, Scott Schiller. All rights reserved.
  * Code provided under the BSD License
  * http://schillmania.com/projects/snowstorm/license.txt
@@ -401,6 +401,7 @@ var snowStorm = (function(window, document) {
         s.o.style.top = storm.flakeBottom+'px';
       } else {
         s.o.style.display = 'none';
+        s.o.style.top = 'auto';
         s.o.style.bottom = '0%';
         s.o.style.position = 'fixed';
         s.o.style.display = 'block';
