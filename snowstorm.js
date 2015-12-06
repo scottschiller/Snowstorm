@@ -261,6 +261,9 @@ var snowStorm = (function(window, document) {
     if (isNaN(scrollY)) {
       scrollY = 0; // Netscape 6 scroll fix
     }
+    if (storm.targetElement) {
+      scrollY = 0; // infinite scroll bug fix when elem height > windowY
+    }
     if (!fixedForEverything && !storm.flakeBottom && storm.flakes) {
       for (i=0; i<storm.flakes.length; i++) {
         if (storm.flakes[i].active === 0) {
