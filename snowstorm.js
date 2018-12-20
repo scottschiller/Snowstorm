@@ -650,7 +650,7 @@ var snowStorm = (function(window, document) {
   }
 
   function doStart() {
-    if (!storm.excludeMobile || !isMobile) {
+    if (storm.autoStart && (!storm.excludeMobile || !isMobile)) {
       doDelayedStart();
     }
     // event cleanup
@@ -658,9 +658,7 @@ var snowStorm = (function(window, document) {
   }
 
   // hooks for starting the snow
-  if (storm.autoStart) {
-    storm.events.add(window, 'load', doStart, false);
-  }
+  storm.events.add(window, 'load', doStart, false);
 
   return this;
 
