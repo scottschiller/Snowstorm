@@ -343,7 +343,7 @@ function XLSF(oTarget,urlBase) {
     }
 
     this.init = function() {
-      self.o.className = 'xlsf-light '+this.sizeClass+' '+this.sClass;
+      self.o.className = 'xlsf-light '+this.sSizeClass+' '+this.sClass;
       self.o.style.left = self.x+'px';
       self.o.style.top = self.y+'px';
       self.o.style.width = self.w+'px';
