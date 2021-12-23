@@ -32,6 +32,7 @@ var snowStorm = (function(window, document) {
   this.useTwinkleEffect = false;  // Allow snow to randomly "flicker" in and out of view while falling
   this.usePositionFixed = false;  // true = snow does not shift vertically when scrolling. May increase CPU load, disabled by default - if enabled, used only where supported
   this.usePixelPosition = false;  // Whether to use pixel values for snow top/left vs. percentages. Auto-enabled if body is position:relative or targetElement is specified.
+  this.accessibility = true;      // Hide snow from screen readers
 
   // --- less-used bits ---
 
@@ -126,7 +127,7 @@ var snowStorm = (function(window, document) {
     };
 
     localFeatures.transform.prop = (
-      localFeatures.transform.w3 || 
+      localFeatures.transform.w3 ||
       localFeatures.transform.moz ||
       localFeatures.transform.webkit ||
       localFeatures.transform.ie ||
@@ -383,6 +384,9 @@ var snowStorm = (function(window, document) {
     this.o.style.overflow = 'hidden';
     this.o.style.fontWeight = 'normal';
     this.o.style.zIndex = storm.zIndex;
+    if (storm.accessibility) {
+      this.o.setAttribute('aria-hidden', storm.accessibility);
+    }
     docFrag.appendChild(this.o);
 
     this.refresh = function() {
