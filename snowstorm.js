@@ -348,6 +348,17 @@ var snowStorm = (function(window, document) {
     for (i=0; i<this.flakes.length; i++) {
       this.flakes[i].o.style.display = 'block';
     }
+    storm.events.add(window,'resize',storm.resizeHandler);
+    storm.events.add(window,'scroll',storm.scrollHandler);
+    if (storm.freezeOnBlur) {
+      if (isIE) {
+        storm.events.add(document,'focusout',storm.freeze);
+        storm.events.add(document,'focusin',storm.resume);
+      } else {
+        storm.events.add(window,'blur',storm.freeze);
+        storm.events.add(window,'focus',storm.resume);
+      }
+    }
   };
 
   this.SnowFlake = function(type,x,y) {
